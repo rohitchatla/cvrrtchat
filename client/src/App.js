@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import axios from 'axios';
-import { ReactComponent as Logo } from './assets/logo.svg';
+import { ReactComponent as Logo } from './assets/cvrr_logo.svg';
 import AppContainer from './components/main/AppContainer';
 export const MessageContext = React.createContext();
 
@@ -101,9 +101,27 @@ function App() {
       <GlobalStyles />
       {!localStorage.loggedIn ? (
         <AppWrap>
-          <div style={{ display: 'flex', marginTop: '50px', marginLeft: '10%' }}>
+          <div
+            style={{
+              display: 'flex',
+              marginTop: '50px',
+              marginLeft: '10%',
+            }}
+          >
             <div>
-              <Logo />
+              <Logo
+                class="container"
+                style={{
+                  display: 'flex',
+                  marginTop: '50px',
+                  marginLeft: '10%',
+                  width: '150px',
+                  height: '150px',
+                  display: 'block',
+                  marginLeft: '525px',
+                  marginRight: '50px',
+                }}
+              />
             </div>
             <H1>Threaded CVRRROOMs</H1>
           </div>
