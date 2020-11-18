@@ -70,6 +70,7 @@ app.use(function errorHandler(error, req, res, next) {
 //Serve Static Assets in production
 //set static folder
 if (process.env.NODE_ENV === 'production') {
+  //local .env is 'development' and in production .env/heroku it is 'production'
   app.use(express.static('client/build'));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
