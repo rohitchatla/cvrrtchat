@@ -39,7 +39,8 @@ const ViewComments = props => {
           });
         });
 
-        let bool = false;
+        let bool = false; //can further check auth checks for message displaying --> * displaying "you are not auth for this channels" w/o showing messages
+
         //console.log(currentChannel);
         currentChannel != undefined &&
           currentChannel.users.map(u => {
@@ -104,6 +105,8 @@ const ViewComments = props => {
         </Description>
       </ChannelSection>
       {/* {console.log(allmessages)} */}
+      {/*can further check auth checks for message displaying --> * displaying "you are not auth for this channels" w/o showing messages
+       */}
       {isLoading && <div>Loading...</div>}
       {isError ? (
         <div>"Something Went Wrong"</div>
