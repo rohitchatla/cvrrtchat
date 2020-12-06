@@ -40,10 +40,10 @@ const ViewComments = props => {
         });
 
         let bool = false;
-        console.log(currentChannel);
+        //console.log(currentChannel);
         currentChannel != undefined &&
           currentChannel.users.map(u => {
-            console.log(u);
+            //console.log(u);
             if (u.id == localStorage.getItem('userId')) {
               bool = true;
             }
@@ -72,7 +72,7 @@ const ViewComments = props => {
   // useEffect(() => {
   //   // to show messages as per that user there in the group or not
   //   let bool = false;
-  //   console.log(currentChannel);
+  //   //console.log(currentChannel);
   //   currentChannel.length > 0 &&
   //     currentChannel.map(c => {
   //       c.users.map(u => {

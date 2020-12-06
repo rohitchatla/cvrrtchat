@@ -9,9 +9,16 @@ function Channels(props) {
   const [invite, setInvite] = useState('');
   const [allnotifsreceived, setAllNotifsreceived] = useState([]); //allnotifs
   const [allnotifssent, setAllNotifssent] = useState([]);
+
+  // const [privateaccess, setprivateaccess] = useState(false);
+  // const [publicaccess, setpublicaccess] = useState(false);
+
   async function createNewChannel() {
     const name = prompt('Channel name?');
     const description = prompt('Channel description?');
+    const publictype = prompt('Public(true/false)');
+    const privatetype = prompt('Private(true/false)');
+    const misctype = prompt('Misctype(all/notall/etc)');
 
     try {
       const result = await axios.post(
@@ -20,6 +27,9 @@ function Channels(props) {
           name,
           description,
           user: localStorage.userId,
+          publictype,
+          privatetype,
+          misctype,
         },
         {
           headers: { authorization: `bearer ${localStorage.authToken}` },
@@ -53,10 +63,12 @@ function Channels(props) {
     }
   }
 
-  async function deleteUserNotifs() {
+  function deleteUserNotifs() {
+    //async
     //deleteReceivedNotifs
     try {
-      const result = await axios.post(
+      const result = axios.post(
+        //await
         '/api/channels/deleteusernotifs',
         {
           uid: localStorage.getItem('userId'),
@@ -72,9 +84,11 @@ function Channels(props) {
     }
   }
 
-  async function deleteSentNotifs() {
+  function deleteSentNotifs() {
+    //async
     try {
-      const result = await axios.post(
+      const result = axios.post(
+        //await
         '/api/channels/deletesentnotifs',
         {
           uid: localStorage.getItem('userId'),
@@ -90,9 +104,11 @@ function Channels(props) {
     }
   }
 
-  useEffect(async () => {
+  useEffect(() => {
+    //async
     try {
-      const result = await axios.post(
+      const result = axios.post(
+        //await
         '/api/channels/allnotifssent',
         {
           uid: localStorage.getItem('userId'),
@@ -108,7 +124,8 @@ function Channels(props) {
     }
 
     try {
-      const result = await axios.post(
+      const result = axios.post(
+        //await
         '/api/channels/allnotifsreceived',
         {
           uid: localStorage.getItem('userId'),
@@ -124,6 +141,22 @@ function Channels(props) {
     }
   }, []);
 
+  function accessCheck(users) {
+    let bool = false;
+    //console.log(users);
+    users.map(u => {
+      if (u.id == localStorage.getItem('userId')) {
+        //uid
+        bool = true;
+      }
+    });
+    // if (bool) return true;
+    // // else return false;
+    //console.log(bool);
+    //setprivateaccess(bool);
+    return bool;
+  }
+
   return (
     <>
       <Header>
@@ -132,23 +165,86 @@ function Channels(props) {
       </Header>
       <ul className="channels">
         {/*showing current_user present in which channels(only those can be handled here(client with bools) or in server(send channels only in which current_user is present)) */}
+
+        <h4>Public</h4>
         {allChannels &&
           allChannels.map(channel => {
-            return (
-              <ChannelInSideBar
-                key={channel.id}
-                id={channel.id}
-                title={channel.name}
-                onClick={() => {
-                  //window.location.reload();
-                  localStorage.setItem('chatprivate', false);
-                  setCurrentChannelID(channel.id);
-                  setchatprivate(false);
-                }}
-                currentChannel={currentChannelID}
-              >
-                # {channel.name}
-              </ChannelInSideBar>
+            return channel.public && channel.misctype == 'all' ? (
+              <>
+                <h5>All_access</h5>
+                <ChannelInSideBar
+                  key={channel.id}
+                  id={channel.id}
+                  title={channel.name}
+                  onClick={() => {
+                    //window.location.reload();
+                    localStorage.setItem('chatprivate', false);
+                    setCurrentChannelID(channel.id);
+                    setchatprivate(false);
+                  }}
+                  currentChannel={currentChannelID}
+                >
+                  #{' '}
+                  {channel.public && channel.public == 'all'
+                    ? channel.name + ' - ' + 'P(All_access)'
+                    : channel.name + ' - ' + 'Pr'}
+                </ChannelInSideBar>
+              </>
+            ) : (
+              ''
+            );
+          })}
+
+        {allChannels &&
+          allChannels.map(channel => {
+            return channel.public && channel.misctype == 'notall' && accessCheck(channel.users) ? (
+              <>
+                <h5>N/A_access(UR_access)</h5>
+                <ChannelInSideBar
+                  key={channel.id}
+                  id={channel.id}
+                  title={channel.name}
+                  onClick={() => {
+                    //window.location.reload();
+                    localStorage.setItem('chatprivate', false);
+                    setCurrentChannelID(channel.id);
+                    setchatprivate(false);
+                  }}
+                  currentChannel={currentChannelID}
+                >
+                  #{' '}
+                  {channel.public && channel.public == 'notall'
+                    ? channel.name + ' - ' + 'P(N/A_access)'
+                    : channel.name + ' - ' + 'Pr'}
+                </ChannelInSideBar>
+              </>
+            ) : (
+              ''
+            );
+          })}
+
+        <h4>Private</h4>
+        {allChannels &&
+          allChannels.map(channel => {
+            return channel.private && accessCheck(channel.users) ? (
+              <>
+                <ChannelInSideBar
+                  key={channel.id}
+                  id={channel.id}
+                  title={channel.name}
+                  onClick={() => {
+                    //window.location.reload();
+                    localStorage.setItem('chatprivate', false);
+                    setCurrentChannelID(channel.id);
+                    setchatprivate(false);
+                  }}
+                  currentChannel={currentChannelID}
+                >
+                  # {channel.public ? channel.name + ' - ' + 'P' : channel.name + ' - ' + 'Pr'}
+                </ChannelInSideBar>
+              </>
+            ) : (
+              ''
             );
           })}
       </ul>

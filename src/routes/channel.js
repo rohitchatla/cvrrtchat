@@ -25,7 +25,7 @@ const channelRouter = io => {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      let { name, description, user, date } = req.body;
+      let { name, description, user, date, publictype, privatetype, misctype } = req.body;
 
       try {
         let channelName = await Channel.findOne({ name });
@@ -43,6 +43,9 @@ const channelRouter = io => {
           comments: [],
           date,
           owner: user,
+          public: publictype,
+          private: privatetype,
+          misctype: misctype,
         }).then(channel => {
           //console.log(channel);
           User.findById(user).then(user => {
@@ -103,6 +106,9 @@ const channelRouter = io => {
             })),
             owner: channel.owner,
             comments: channel.comments.map(serializeComment),
+            public: channel.public,
+            private: channel.private,
+            misctype: channel.misctype,
           };
         });
       }
@@ -141,7 +147,8 @@ const channelRouter = io => {
     });
   });
 
-  router.post('/invite', async (req, res) => {//can handle it directly to add user to channel based on private(notif to admin as we are doing here treating all channels to be private, but still can be tweaked by adding private/public bool in channelSchema.) and public channel(add directly)
+  router.post('/invite', async (req, res) => {
+    //can handle it directly to add user to channel based on private(notif to admin as we are doing here treating all channels to be private, but still can be tweaked by adding private/public bool in channelSchema.) and public channel(add directly)
     const { channelid, uid } = req.body;
     Channel.findById(channelid)
       .then(ch => {

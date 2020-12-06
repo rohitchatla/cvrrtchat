@@ -30,6 +30,14 @@ const ChannelSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  public: {
+    type: Boolean,
+    default: true,
+  },
+  misctype: {
+    type: String,
+    default: 'all',
+  },
 });
 
 module.exports = Channel = mongoose.model('channel', ChannelSchema);
