@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faAd, faPlus, faTimesCircle, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 
 function Channels(props) {
   const { allChannels, currentChannelID, setCurrentChannelID, setchatprivate } = props;
-
+  const [invite, setInvite] = useState('');
+  const [allnotifsreceived, setAllNotifsreceived] = useState([]); //allnotifs
+  const [allnotifssent, setAllNotifssent] = useState([]);
   async function createNewChannel() {
     const name = prompt('Channel name?');
     const description = prompt('Channel description?');
@@ -31,6 +33,97 @@ function Channels(props) {
     }
   }
 
+  async function inviteFunc() {
+    //this can also be GET method(url with channel id) so which sends notif to admin or directly adds to group(toggle anything of this in server route of this)
+    try {
+      const result = await axios.post(
+        '/api/channels/invite',
+        {
+          channelid: invite,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      window.location.reload();
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
+  async function deleteUserNotifs() {
+    //deleteReceivedNotifs
+    try {
+      const result = await axios.post(
+        '/api/channels/deleteusernotifs',
+        {
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      setAllNotifsreceived(result.data);
+    } catch (error) {
+      console.log('deleteUserNotifs error: ', error);
+    }
+  }
+
+  async function deleteSentNotifs() {
+    try {
+      const result = await axios.post(
+        '/api/channels/deletesentnotifs',
+        {
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      setAllNotifssent(result.data);
+    } catch (error) {
+      console.log('deleteUserNotifs error: ', error);
+    }
+  }
+
+  useEffect(async () => {
+    try {
+      const result = await axios.post(
+        '/api/channels/allnotifssent',
+        {
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      setAllNotifssent(result.data);
+    } catch (error) {
+      console.log('allnotifs error: ', error);
+    }
+
+    try {
+      const result = await axios.post(
+        '/api/channels/allnotifsreceived',
+        {
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      setAllNotifsreceived(result.data);
+    } catch (error) {
+      console.log('allnotifs error: ', error);
+    }
+  }, []);
+
   return (
     <>
       <Header>
@@ -38,6 +131,7 @@ function Channels(props) {
         <FontAwesomeIcon onClick={() => createNewChannel()} icon={faPlus} size="1x" />
       </Header>
       <ul className="channels">
+        {/*showing current_user present in which channels(only those can be handled here(client with bools) or in server(send channels only in which current_user is present)) */}
         {allChannels &&
           allChannels.map(channel => {
             return (
@@ -57,6 +151,64 @@ function Channels(props) {
               </ChannelInSideBar>
             );
           })}
+      </ul>
+
+      <Header>
+        <h3>Notifications</h3>
+        <h3>(S)-(R)</h3>
+        <FontAwesomeIcon onClick={() => deleteSentNotifs()} icon={faCrosshairs} size="0.5x" />
+        <FontAwesomeIcon onClick={() => deleteUserNotifs()} icon={faTimesCircle} size="0.5x" />
+      </Header>
+      <ul className="channels">
+        <li>Received</li>
+        {allnotifsreceived &&
+          allnotifsreceived.map(noti => {
+            return (
+              <ChannelInSideBar
+                key={noti._id}
+                id={noti._id}
+                onClick={() => {
+                  alert(JSON.stringify(noti));
+                }}
+              >
+                {noti.message}
+              </ChannelInSideBar>
+            );
+          })}
+        <li>Sent</li>
+        {allnotifssent &&
+          allnotifssent.map(noti => {
+            return (
+              <ChannelInSideBar
+                key={noti._id}
+                id={noti._id}
+                onClick={() => {
+                  alert(JSON.stringify(noti));
+                }}
+              >
+                {noti.message}
+              </ChannelInSideBar>
+            );
+          })}
+        <li>
+          <input
+            name="invite"
+            value={invite}
+            type="text"
+            placeholder="Add me to this group(:id)"
+            onChange={e => {
+              console.log(e.target.value);
+              setInvite(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                e.preventDefault();
+                inviteFunc();
+                setInvite('');
+              }
+            }}
+          ></input>
+        </li>
       </ul>
     </>
   );

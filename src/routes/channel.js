@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const Channel = require('../models/Channel');
 const User = require('../models/User');
+const Notif = require('../models/notif');
 /**
  * @route POST api/channels
  * @access Private
@@ -138,6 +139,71 @@ const channelRouter = io => {
         });
       }
     });
+  });
+
+  router.post('/invite', async (req, res) => {//can handle it directly to add user to channel based on private(notif to admin as we are doing here treating all channels to be private, but still can be tweaked by adding private/public bool in channelSchema.) and public channel(add directly)
+    const { channelid, uid } = req.body;
+    Channel.findById(channelid)
+      .then(ch => {
+        User.findById(uid).then(u => {
+          const notif = Notif.create({
+            from: uid,
+            fromname: u.name,
+            to: channelid,
+            channelname: ch.name,
+            channeladmin: ch.owner,
+            message: `Add ${u.name} to ${ch.name}`,
+          }).then(noti => {
+            console.log(noti);
+          });
+        });
+      })
+      .catch(e => {});
+  });
+
+  // router.post('/allnotifs', async (req, res) => {
+  //   Notif.find()
+  //     .then(noti => {
+  //       //console.log(noti);
+  //       res.send(noti);
+  //     })
+  //     .catch(e => {});
+  // });
+
+  router.post('/allnotifssent', async (req, res) => {
+    Notif.find({ from: req.body.uid })
+      .then(noti => {
+        //console.log(noti);
+        res.send(noti);
+      })
+      .catch(e => {});
+  });
+
+  router.post('/allnotifsreceived', async (req, res) => {
+    Notif.find({ channeladmin: req.body.uid })
+      .then(noti => {
+        //console.log(noti);
+        res.send(noti);
+      })
+      .catch(e => {});
+  });
+
+  router.post('/deleteusernotifs', async (req, res) => {
+    Notif.deleteMany({ channeladmin: req.body.uid })
+      .then(noti => {
+        //console.log(noti);
+        res.send(noti);
+      })
+      .catch(e => {});
+  });
+
+  router.post('/deletesentnotifs', async (req, res) => {
+    Notif.deleteMany({ from: req.body.uid })
+      .then(noti => {
+        //console.log(noti);
+        res.send(noti);
+      })
+      .catch(e => {});
   });
 
   return router;

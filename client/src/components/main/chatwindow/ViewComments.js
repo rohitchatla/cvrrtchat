@@ -26,6 +26,7 @@ const ViewComments = props => {
 
   const { currentChannel, checkprivate, currentUser, allmessages } = props;
 
+  const [showMessages, setshowMessages] = useState(false); // to show messages as per that user there in the group or not
   useEffect(() => {
     setIsLoading(true);
     try {
@@ -37,6 +38,22 @@ const ViewComments = props => {
             return comment;
           });
         });
+
+        let bool = false;
+        console.log(currentChannel);
+        currentChannel != undefined &&
+          currentChannel.users.map(u => {
+            console.log(u);
+            if (u.id == localStorage.getItem('userId')) {
+              bool = true;
+            }
+          });
+
+        if (bool) {
+          setshowMessages(true);
+        } else {
+          setshowMessages(false);
+        }
 
         setIsLoading(false);
       }
@@ -51,6 +68,26 @@ const ViewComments = props => {
       scrollToBottom(refContainer);
     }
   });
+
+  // useEffect(() => {
+  //   // to show messages as per that user there in the group or not
+  //   let bool = false;
+  //   console.log(currentChannel);
+  //   currentChannel.length > 0 &&
+  //     currentChannel.map(c => {
+  //       c.users.map(u => {
+  //         if (u.id == localStorage.getItem('userId')) {
+  //           bool = true;
+  //         }
+  //       });
+  //     });
+
+  //   if (bool) {
+  //     setshowMessages(true);
+  //   } else {
+  //     setshowMessages(false);
+  //   }
+  // }, []);
 
   return (
     <Wrapper ref={refContainer}>
@@ -100,6 +137,8 @@ const ViewComments = props => {
             );
         })
       ) : (
+        showMessages &&
+        allComments &&
         allComments.map(comment => {
           return (
             <Comment

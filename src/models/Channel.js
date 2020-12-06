@@ -26,6 +26,10 @@ const ChannelSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
   },
+  private: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = Channel = mongoose.model('channel', ChannelSchema);
