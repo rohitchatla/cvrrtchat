@@ -105,7 +105,7 @@ function Channels(props) {
   }
 
   useEffect(() => {
-    //async
+    //async()
     try {
       const result = axios.post(
         //await
