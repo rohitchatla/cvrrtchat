@@ -37,6 +37,7 @@
     "express-validator": "^6.4.0",
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
+    "grpc": "^1.24.4",
     "helmet": "^3.21.1",
     "husky": "^4.2.3",
     "jsonwebtoken": "^8.5.1",
