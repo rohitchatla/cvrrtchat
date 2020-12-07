@@ -1,1 +1,1 @@
-"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client", --> removed, as ir was causing problem when building in heroku push but not must need to build client before pushing to heroku
+"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client", --> removed, as it was causing problem when building in heroku push but not must need to build client before pushing to heroku
