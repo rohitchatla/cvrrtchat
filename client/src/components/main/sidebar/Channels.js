@@ -44,7 +44,7 @@ function Channels(props) {
   }
 
   async function inviteFunc() {
-    //this can also be GET method(url with channel id) so which sends notif to admin or directly adds to group(toggle anything of this in server route of this)
+    //this can also be GET method(url with channel id-->invite url based) so which sends notif to admin or directly adds to group(toggle anything of this in server route of this)
     try {
       const result = await axios.post(
         '/api/channels/invite',
