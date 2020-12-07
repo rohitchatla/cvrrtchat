@@ -5,6 +5,9 @@ import axios from 'axios';
 import Message from '../message/Message';
 import { MessageContext } from '../../App';
 
+import firebase from '../main/chatwindow/firebase';
+import { auth, provider } from '../main/chatwindow/firebase';
+
 const P = styled.p`
   margin-left: 25%;
   font-size: 12px;
@@ -30,6 +33,43 @@ function Register(props) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   let errorMessage = useContext(MessageContext);
+
+  function signUp() {
+    auth
+      .signInWithPopup(provider)
+      .then(result => {
+        console.log(result); //result.user.id (/displayName/email/photoURL)
+        let name = result.user.displayName;
+        let password = '1234cvrr@1234'; // just to bypass in social(google) login (alter:: pass bool_password and to ignore password in serverside(backend) for social logins and accept for locallogin)
+        let email = result.user.email;
+        const newUser = { name, password, email };
+
+        axios
+          .post('/api/users/register', newUser)
+          .then(res => {
+            const user = { password, email };
+            axios
+              .post('/api/users/login', user)
+              .then(res => {
+                localStorage.setItem('authToken', res.data.authToken);
+                localStorage.setItem('userId', res.data.user.id);
+                localStorage.setItem('loggedIn', true);
+                props.onChange(Math.random());
+              })
+              .catch(err => {
+                console.log(err);
+                // errorMessage.set_message(err, true);
+              });
+          })
+          .catch(err => {
+            console.log(err);
+            // errorMessage.set_message(err, true);
+          });
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  }
 
   function subRegisterForm(e) {
     e.preventDefault();
@@ -104,6 +144,12 @@ function Register(props) {
         </Label>
         <Message message={errorMessage.message} />
         <Button type="submit">Sign Up</Button>
+        <div>
+          {/* <img src={cvrrlogo} alt="cvrr_logo" /> */}
+          <h1>Sign up to cvrr_chatrooms</h1>
+          <p></p>
+          <Button onClick={() => signUp()}>Sign up with Google</Button>
+        </div>
       </FormWrap>
       <hr />
       <P onClick={() => props.set_new_user(false)}>Sign in</P>

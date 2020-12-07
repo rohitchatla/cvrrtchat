@@ -5,6 +5,7 @@ const User = require('../models/User');
 const { createAuthToken } = require('../auth/router');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
+const Channel = require('../models/Channel');
 
 /**
  * @route POST api/users
@@ -25,6 +26,7 @@ const userRouter = io => {
       //We shouldn't be sending back the attempted password I think
     ],
     async (req, res) => {
+      console.log(req.body);
       // express-validator
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -44,7 +46,8 @@ const userRouter = io => {
         }
 
         let generalChannelId = await Channel.find({ name: 'General' }).then(generalChannel => {
-          return generalChannel[0]._id;
+          //console.log(generalChannel);
+          return generalChannel[0]._id; //'5fae09f34aa15a0b40056e71'
         });
 
         // this hashes the password

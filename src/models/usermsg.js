@@ -10,6 +10,18 @@ const userMsgSchema = new mongoose.Schema({
   isEdited: { type: Boolean, default: false },
   threadedComment: { type: Boolean, default: false },
   threadedComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'usermsg' }],
+  type: { type: String, default: 'all', required: false },
+  video: {
+    contentType: String,
+    path: String,
+    required: false,
+  },
+  photo: {
+    data: Buffer,
+    contentType: String,
+    path: String,
+    required: false,
+  },
 });
 
 //Creates comment model to construct documents for our database

@@ -136,6 +136,8 @@ const ViewComments = props => {
                 channelID={msg.userto[0]._id}
                 setClickChange={props.setClickChange}
                 chatprivate={checkprivate}
+                photo={msg.photo}
+                video={msg.video}
               ></Comment>
             );
         })
@@ -159,6 +161,8 @@ const ViewComments = props => {
               getThreadInfo={props.getThreadInfo}
               channelID={comment.channelID}
               setClickChange={props.setClickChange}
+              photo={comment.photo}
+              video={comment.video}
             ></Comment>
           );
         })

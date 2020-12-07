@@ -92,6 +92,8 @@ const channelRouter = io => {
             ...(eachComment.threadedComments.length > 0
               ? { thread: eachComment.threadedComments.map(serializeComment) }
               : null),
+            photo: eachComment.photo,
+            video: eachComment.video,
           });
 
           return {

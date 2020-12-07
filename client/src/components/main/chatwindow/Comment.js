@@ -82,6 +82,8 @@ const Comment = props => {
     channelID,
     refContainer,
     chatprivate,
+    photo,
+    video,
   } = props;
   const dropdown = useRef(null);
   const menu = useRef(null);
@@ -146,6 +148,10 @@ const Comment = props => {
       ) : (
         <Styled.CommentTextWrapper>
           <Styled.CommentText>{text}</Styled.CommentText>
+          {photo && photo.path != '' && <img src={photo.path} width="200px" height="200px" />}
+          {video && video.path != '' && (
+            <video src={video.path} width="200px" height="200px" controls />
+          )}
           <Styled.CommentEdited isEdited={isEdited}>(edited)</Styled.CommentEdited>
           {thread && (
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>

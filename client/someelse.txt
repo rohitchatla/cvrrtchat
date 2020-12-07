@@ -1,0 +1,1 @@
+"proxy": "https://cvrrtchat.herokuapp.com/", in package.json(client) can be kept but not kept just shown to say so can do it likewise

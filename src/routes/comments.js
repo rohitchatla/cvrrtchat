@@ -1,5 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const formidable = require('formidable');
+const fs = require('fs');
+
+var multer = require('multer');
+const crypto = require('crypto');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cd) => {
+    cd(null, './assets/');
+  },
+  // filename: (req, file, cd) => {
+  //   cd(null, crypto.randomBytes(10).toString('hex') + file.originalname);
+  // },
+});
+
+const uploadFile = multer({ storage });
+
 const { body, validationResult } = require('express-validator');
 const Comment = require('../models/Comment');
 const Usermsg = require('../models/usermsg');
@@ -75,6 +92,7 @@ Return response containing new comment in JSON
 
   router.post(
     '/',
+    //uploadFile.single('photo'),
     [
       body('user', 'must provide user id')
         .not()
@@ -85,21 +103,19 @@ Return response containing new comment in JSON
     ],
 
     (req, res) => {
+      //console.log(req.body);
+
       //express-validator
       const errors = validationResult(req);
-
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-
       if (!(req.user._id.toString() === req.body.user)) {
         return res
           .status(400)
           .json({ message: "User ID in body and user ID associated with token don't match" });
       }
-
       const { user, text, date, threadedComment, parentID, channelID } = req.body;
-
       User.findById(user)
         .then(user => {
           if (user) {
@@ -107,12 +123,10 @@ Return response containing new comment in JSON
               if (!parentID) {
                 return res.status(400).json({ Error: 'Parent comment ID not supplied' });
               }
-
               Comment.findById(parentID).then(parent => {
                 if (parent.threadedComment) {
                   return res.status(400).json({ Error: 'You can not create a thread on a thread' });
                 }
-
                 Comment.create({
                   user: user._id,
                   text,
@@ -127,8 +141,6 @@ Return response containing new comment in JSON
                       date,
                       _id,
                       text,
-                      user: user.name,
-                      userImage: user.userImage,
                     });
                     return comment;
                   })
@@ -138,20 +150,66 @@ Return response containing new comment in JSON
                   });
               });
             } else {
+              //console.log(req.body);
               Channel.findById(channelID)
                 .then(channel => {
                   if (!channel) {
                     return res.status(404).json({ Error: 'Channel not found' });
                   }
 
+                  // let photo = {};
+                  // if (req.body.photostring != 'undefined' && req.body.photostring != undefined) {
+                  //   let photoobj = JSON.parse(req.body.photostring);
+                  //   if (photoobj.path) {
+                  //     photo.data = fs.readFileSync(photoobj.path);
+                  //     photo.contentType = photoobj.contentType;
+                  //     photo.path = photoobj.path;
+                  //   }
+                  // }
+
+                  // let form = new formidable.IncomingForm();
+                  // form.keepExtensions = true;
+                  // form.parse(req, async (err, fields, files) => {
+                  //   if (err) {
+                  //     return res.status(400).json({
+                  //       error: 'Image could not be uploaded',
+                  //     });
+                  //   }
+
+                  //   // var oldPath = files.photo.path;
+                  //   // var newPath = path.join(__dirname, 'uploads')
+                  //   //         + '/'+files.photo.name
+                  //   // var rawData = fs.readFileSync(oldPath)
+
+                  //   // fs.writeFile(newPath, rawData, function(err){
+                  //   //     if(err) console.log(err)
+                  //   //     return res.send("Successfully uploaded")
+                  //   // })
+                  //   //console.log(files);
+                  // });
+
+                  // console.log(req.body.photo);
+
+                  photo = {};
+                  photo.data = '';
+                  photo.contentType = 'image/jpeg';
+                  photo.path = req.body.photo;
+
+                  video = {};
+                  video.data = '';
+                  video.contentType = 'video/mp4';
+                  video.path = req.body.video;
+
                   Comment.create({
                     user: user._id,
                     text,
                     date,
+                    photo,
+                    video,
+                    type: 'all',
                   })
                     .then(comment => {
                       const { date, _id, text } = comment;
-
                       channel.comments.push(_id);
                       channel.save();
                       res.status(201).json({
@@ -161,7 +219,6 @@ Return response containing new comment in JSON
                         user: user.name,
                         channelID,
                       });
-
                       return comment;
                     })
                     .then(comment => {
@@ -191,8 +248,46 @@ Return response containing new comment in JSON
           res.status(500).json({ message: 'Something went wrong' });
         });
     },
+
+    /*
+    var new_img = new Img;
+    new_img.img.data = fs.readFileSync(req.file.path)
+    new_img.img.contentType = 'image/jpeg';
+    new_img.save();
+
+    arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+};
+
+componentDidMount() {
+    fetch('http://yourserver.com/api/img_data')
+    .then((res) => res.json())
+    .then((data) => {
+        // console.log(img)
+        var base64Flag = 'data:image/jpeg;base64,';
+        var imageStr = this.arrayBufferToBase64(data.img.data.data);
+        this.setState({
+            img: base64Flag + imageStr
+        )}
+    })
+}
+
+render() {
+    const {img} = this.state;
+    return (
+        <img
+            src={img}
+            alt='Helpful alt text'/>
+     )
+}
+export default Image;
+    */
   );
   router.post('/private/g', (req, res) => {
+    //not in running mode(this route)
     const { userfrom, text, userto, parentID, threadedComment } = req.body; //userfrom->id of currentuser
     //console.log('hiih');
     if (threadedComment) {
@@ -348,6 +443,15 @@ Return response containing new comment in JSON
         });
       });
     } else {
+      photo = {};
+      photo.data = '';
+      photo.contentType = 'image/jpeg';
+      photo.path = req.body.photo;
+
+      video = {};
+      video.data = '';
+      video.contentType = 'video/mp4';
+      video.path = req.body.video;
       try {
         User.findById(userfrom).then(ufrom => {
           User.findById(userto).then(uto => {
@@ -355,6 +459,9 @@ Return response containing new comment in JSON
               userfrom: ufrom,
               text,
               userto: uto,
+              photo,
+              video,
+              type: 'all',
             })
               .then(msg => {
                 //console.log(msg);
