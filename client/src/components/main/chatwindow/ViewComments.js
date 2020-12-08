@@ -136,8 +136,11 @@ const ViewComments = props => {
                 channelID={msg.userto[0]._id}
                 setClickChange={props.setClickChange}
                 chatprivate={checkprivate}
+                type={msg.type}
                 photo={msg.photo}
                 video={msg.video}
+                etcfile={msg.etcfile}
+                filetype={msg.filetype}
               ></Comment>
             );
         })
@@ -161,8 +164,11 @@ const ViewComments = props => {
               getThreadInfo={props.getThreadInfo}
               channelID={comment.channelID}
               setClickChange={props.setClickChange}
+              type={comment.type}
               photo={comment.photo}
               video={comment.video}
+              etcfile={comment.etcfile}
+              filetype={comment.filetype}
             ></Comment>
           );
         })

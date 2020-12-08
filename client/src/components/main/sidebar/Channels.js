@@ -10,6 +10,9 @@ function Channels(props) {
   const [allnotifsreceived, setAllNotifsreceived] = useState([]); //allnotifs
   const [allnotifssent, setAllNotifssent] = useState([]);
 
+  const [inviteuserid, setInviteuserid] = useState('');
+  const [invitechannelid, setInvitechannelid] = useState('');
+
   // const [privateaccess, setprivateaccess] = useState(false);
   // const [publicaccess, setpublicaccess] = useState(false);
 
@@ -104,10 +107,10 @@ function Channels(props) {
     }
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     //async()
     try {
-      const result = axios.post(
+      const result = await axios.post(
         //await
         '/api/channels/allnotifssent',
         {
@@ -124,7 +127,7 @@ function Channels(props) {
     }
 
     try {
-      const result = axios.post(
+      const result = await axios.post(
         //await
         '/api/channels/allnotifsreceived',
         {
@@ -157,6 +160,44 @@ function Channels(props) {
     return bool;
   }
 
+  const autoaddUser = cid => {
+    axios
+      .post(
+        '/api/channels/autoadduserinvite',
+        {
+          cid: cid,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      )
+      .then(res => {
+        console.log(res);
+        alert('added successfully');
+      });
+  };
+
+  function inviteUserchannel() {
+    try {
+      const result = axios.post(
+        '/api/channels/inviteuserchannel',
+        {
+          channelid: invitechannelid,
+          toid: inviteuserid,
+          fromid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      window.location.reload();
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
   return (
     <>
       <Header>
@@ -167,11 +208,11 @@ function Channels(props) {
         {/*showing current_user present in which channels(only those can be handled here(client with bools) or in server(send channels only in which current_user is present)) */}
 
         <h4>Public</h4>
+        <h5>All_access</h5>
         {allChannels &&
           allChannels.map(channel => {
             return channel.public && channel.misctype == 'all' ? (
               <>
-                <h5>All_access</h5>
                 <ChannelInSideBar
                   key={channel.id}
                   id={channel.id}
@@ -195,11 +236,11 @@ function Channels(props) {
             );
           })}
 
+        <h5>N/A_access(UR_access)</h5>
         {allChannels &&
           allChannels.map(channel => {
             return channel.public && channel.misctype == 'notall' && accessCheck(channel.users) ? (
               <>
-                <h5>N/A_access(UR_access)</h5>
                 <ChannelInSideBar
                   key={channel.id}
                   id={channel.id}
@@ -216,6 +257,37 @@ function Channels(props) {
                   {channel.public && channel.public == 'notall'
                     ? channel.name + ' - ' + 'P(N/A_access)'
                     : channel.name + ' - ' + 'Pr'}
+                </ChannelInSideBar>
+              </>
+            ) : (
+              ''
+            );
+          })}
+
+        {/*Click invite to get access and pops in N/A_access(UR_access)*/}
+        <h5>N/A_access</h5>
+        {allChannels &&
+          allChannels.map(channel => {
+            return channel.public && channel.misctype == 'notall' && !accessCheck(channel.users) ? (
+              <>
+                <ChannelInSideBar
+                  key={channel.id + '12'}
+                  id={channel.id + '12'}
+                  title={channel.name}
+                  onClick={() => {
+                    //window.location.reload();
+                    // localStorage.setItem('chatprivate', false);
+                    // setCurrentChannelID(channel.id);
+                    // setchatprivate(false);
+                    autoaddUser(channel.id);
+                  }}
+                  currentChannel={currentChannelID}
+                >
+                  #{' '}
+                  {/* {channel.public && channel.public == 'notall'
+                    ? channel.name + ' - ' + 'P(N/A_access)'
+                    : channel.name + ' - ' + 'Pr'} */}
+                  {channel.name + ' - Invite'}
                 </ChannelInSideBar>
               </>
             ) : (
@@ -256,7 +328,7 @@ function Channels(props) {
         <FontAwesomeIcon onClick={() => deleteUserNotifs()} icon={faTimesCircle} size="0.5x" />
       </Header>
       <ul className="channels">
-        <li>Received</li>
+        <li>Received: </li>
         {allnotifsreceived &&
           allnotifsreceived.map(noti => {
             return (
@@ -271,7 +343,7 @@ function Channels(props) {
               </ChannelInSideBar>
             );
           })}
-        <li>Sent</li>
+        <li>Sent: </li>
         {allnotifssent &&
           allnotifssent.map(noti => {
             return (
@@ -301,6 +373,46 @@ function Channels(props) {
                 e.preventDefault();
                 inviteFunc();
                 setInvite('');
+              }
+            }}
+          ></input>
+        </li>
+
+        <li>
+          <input
+            name="inviteuserid"
+            value={inviteuserid}
+            type="text"
+            placeholder="Invite(:user_id))"
+            onChange={e => {
+              console.log(e.target.value);
+              setInviteuserid(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                e.preventDefault();
+                //inviteFunc();
+                setInviteuserid('');
+              }
+            }}
+          ></input>
+        </li>
+
+        <li>
+          <input
+            name="invitechannelid"
+            value={invitechannelid}
+            type="text"
+            placeholder="Invite(:channel_id)"
+            onChange={e => {
+              console.log(e.target.value);
+              setInvitechannelid(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                e.preventDefault();
+                inviteUserchannel();
+                setInvitechannelid('');
               }
             }}
           ></input>

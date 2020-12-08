@@ -9,13 +9,21 @@ const commentSchema = new mongoose.Schema({
   isEdited: { type: Boolean, default: false },
   threadedComment: { type: Boolean, default: false },
   threadedComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-  type: { type: String, default: 'all', required: false },
+  type: { type: String, default: 'all', required: false }, //for pic/vid add added
+  //filetype: { type: String, default: '.', required: false }, //if video can be videe/etc-->but now added etcfile new field for that
+  filetype: { type: Object },
   video: {
     contentType: String,
     path: String,
     required: false,
   },
   photo: {
+    data: Buffer,
+    contentType: String,
+    path: String,
+    required: false,
+  },
+  etcfile: {
     data: Buffer,
     contentType: String,
     path: String,

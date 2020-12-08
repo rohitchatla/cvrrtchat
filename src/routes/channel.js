@@ -92,8 +92,11 @@ const channelRouter = io => {
             ...(eachComment.threadedComments.length > 0
               ? { thread: eachComment.threadedComments.map(serializeComment) }
               : null),
+            type: eachComment.type,
             photo: eachComment.photo,
             video: eachComment.video,
+            etcfile: eachComment.etcfile,
+            filetype: eachComment.filetype,
           });
 
           return {
@@ -149,6 +152,55 @@ const channelRouter = io => {
     });
   });
 
+  router.post('/autoadduserinvite', async (req, res) => {
+    const { cid, uid } = req.body;
+
+    Channel.findById(cid).then(channel => {
+      const func = userid => userid == uid;
+      const funcown = userid => userid == channel.owner;
+      const bol = channel.users.some(func);
+      const bolown = channel.users.some(funcown);
+      if (bol) {
+        if (bolown) {
+          res.json({ msg: 'Owner cant him/her-self :D)' });
+        } else {
+          res.json({ msg: 'User already there in the channel' });
+        }
+      } else {
+        channel.users.push(uid);
+        channel.save();
+        User.findById(uid).then(user => {
+          user.channels.push(cid);
+          user.save();
+          console.log('saved');
+          res.json({ msg: 'Added User to the channel & channel to User' });
+        });
+      }
+    });
+  });
+
+  router.post('/inviteuserchannel', async (req, res) => {
+    const { channelid, fromid, toid } = req.body;
+    Channel.findById(channelid).then(ch => {
+      User.findById(fromid)
+        .then(ufrom => {
+          User.findById(toid).then(uto => {
+            const notif = Notif.create({
+              from: fromid,
+              fromname: ufrom.name,
+              to: toid,
+              channelname: uto.name,
+              channeladmin: toid,
+              message: `Invitation from ${ufrom.name} for channel ${ch.name} with channel_id ${channelid}`,
+            }).then(noti => {
+              //console.log(noti);
+            });
+          });
+        })
+        .catch(e => {});
+    });
+  });
+
   router.post('/invite', async (req, res) => {
     //can handle it directly to add user to channel based on private(notif to admin as we are doing here treating all channels to be private, but still can be tweaked by adding private/public bool in channelSchema.) and public channel(add directly)
     const { channelid, uid } = req.body;
@@ -163,7 +215,7 @@ const channelRouter = io => {
             channeladmin: ch.owner,
             message: `Add ${u.name} to ${ch.name}`,
           }).then(noti => {
-            console.log(noti);
+            //console.log(noti);
           });
         });
       })

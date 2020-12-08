@@ -82,8 +82,11 @@ const Comment = props => {
     channelID,
     refContainer,
     chatprivate,
+    type,
     photo,
     video,
+    etcfile,
+    filetype,
   } = props;
   const dropdown = useRef(null);
   const menu = useRef(null);
@@ -151,6 +154,11 @@ const Comment = props => {
           {photo && photo.path != '' && <img src={photo.path} width="200px" height="200px" />}
           {video && video.path != '' && (
             <video src={video.path} width="200px" height="200px" controls />
+          )}
+          {etcfile && etcfile.path != '' && (
+            <a href={etcfile.path} target="_blank">
+              View File Here
+            </a>
           )}
           <Styled.CommentEdited isEdited={isEdited}>(edited)</Styled.CommentEdited>
           {thread && (

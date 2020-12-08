@@ -38,6 +38,7 @@ const ChannelSchema = new mongoose.Schema({
     type: String,
     default: 'all',
   },
+  //invitingchannels(bol)-->autoadd once clicked in invite(channel type: public(true) && misctype: notall )
 });
 
 module.exports = Channel = mongoose.model('channel', ChannelSchema);

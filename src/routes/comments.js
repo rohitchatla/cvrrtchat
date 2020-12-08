@@ -189,16 +189,22 @@ Return response containing new comment in JSON
                   // });
 
                   // console.log(req.body.photo);
+                  // console.log(req.body.filetype);
 
                   photo = {};
                   photo.data = '';
-                  photo.contentType = 'image/jpeg';
+                  photo.contentType = req.body.filetype.filetypep; //'image/jpeg';
                   photo.path = req.body.photo;
 
                   video = {};
                   video.data = '';
-                  video.contentType = 'video/mp4';
+                  video.contentType = req.body.filetype.filetypev; //'video/mp4';
                   video.path = req.body.video;
+
+                  etcfile = {};
+                  etcfile.data = '';
+                  etcfile.contentType = req.body.filetype.filetypee; //'application/zip/etc';
+                  etcfile.path = req.body.etcfile;
 
                   Comment.create({
                     user: user._id,
@@ -207,6 +213,8 @@ Return response containing new comment in JSON
                     photo,
                     video,
                     type: 'all',
+                    etcfile,
+                    filetype: req.body.filetype,
                   })
                     .then(comment => {
                       const { date, _id, text } = comment;
@@ -445,13 +453,19 @@ export default Image;
     } else {
       photo = {};
       photo.data = '';
-      photo.contentType = 'image/jpeg';
+      photo.contentType = req.body.filetype.filetypep; //'image/jpeg';
       photo.path = req.body.photo;
 
       video = {};
       video.data = '';
-      video.contentType = 'video/mp4';
+      video.contentType = req.body.filetype.filetypev; //'video/mp4';
       video.path = req.body.video;
+
+      etcfile = {};
+      etcfile.data = '';
+      etcfile.contentType = req.body.filetype.filetypee; //'application/zip/etc';
+      etcfile.path = req.body.etcfile;
+
       try {
         User.findById(userfrom).then(ufrom => {
           User.findById(userto).then(uto => {
@@ -462,6 +476,8 @@ export default Image;
               photo,
               video,
               type: 'all',
+              etcfile,
+              filetype: req.body.filetype,
             })
               .then(msg => {
                 //console.log(msg);
