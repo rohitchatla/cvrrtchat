@@ -97,6 +97,7 @@ const channelRouter = io => {
             video: eachComment.video,
             etcfile: eachComment.etcfile,
             filetype: eachComment.filetype,
+            multiplefiles: eachComment.multiplefiles,
           });
 
           return {

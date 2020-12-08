@@ -6,6 +6,9 @@ const fs = require('fs');
 var multer = require('multer');
 const crypto = require('crypto');
 
+// const firebase = require('./firebase');
+// var fstorage = require('@google-cloud/storage');
+
 const storage = multer.diskStorage({
   destination: (req, file, cd) => {
     cd(null, './assets/');
@@ -215,6 +218,7 @@ Return response containing new comment in JSON
                     type: 'all',
                     etcfile,
                     filetype: req.body.filetype,
+                    multiplefiles: req.body.multiplefiles,
                   })
                     .then(comment => {
                       const { date, _id, text } = comment;
@@ -294,6 +298,7 @@ render() {
 export default Image;
     */
   );
+
   router.post('/private/g', (req, res) => {
     //not in running mode(this route)
     const { userfrom, text, userto, parentID, threadedComment } = req.body; //userfrom->id of currentuser
@@ -478,6 +483,7 @@ export default Image;
               type: 'all',
               etcfile,
               filetype: req.body.filetype,
+              multiplefiles: req.body.multiplefiles,
             })
               .then(msg => {
                 //console.log(msg);
@@ -553,6 +559,20 @@ export default Image;
       console.log(error);
     }
   });
+
+  // router.delete('/checkdeletefirebase', (req, res) => {
+  //   console.log('called');
+  //   const storage = firebase.storage();
+  //   let imageRef = storage.refFromURL(
+  //     'https://firebasestorage.googleapis.com/v0/b/chatrooms-2dbf2.appspot.com/o/cvrrtchat%2Fmultiple%2FGeneral-5fae09f34aa15a0b40056e71%2F20190509_031320_0000.png82c6100-2d78-ea38-c56f-f20874ce5ed?alt=media&token=ea75a6b3-7d4e-4616-9895-d3cefe15fd32',
+  //   );
+  //   imageRef
+  //     .delete()
+  //     .then(() => {
+  //       console.log('Deleted');
+  //     })
+  //     .catch(err => console.log(err));
+  // });
 
   /*
 Route DELETE requests 

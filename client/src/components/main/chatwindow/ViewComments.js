@@ -141,6 +141,7 @@ const ViewComments = props => {
                 video={msg.video}
                 etcfile={msg.etcfile}
                 filetype={msg.filetype}
+                multiplefiles={msg.multiplefiles}
               ></Comment>
             );
         })
@@ -169,6 +170,7 @@ const ViewComments = props => {
               video={comment.video}
               etcfile={comment.etcfile}
               filetype={comment.filetype}
+              multiplefiles={comment.multiplefiles}
             ></Comment>
           );
         })

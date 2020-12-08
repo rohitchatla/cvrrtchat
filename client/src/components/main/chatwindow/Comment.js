@@ -87,6 +87,7 @@ const Comment = props => {
     video,
     etcfile,
     filetype,
+    multiplefiles,
   } = props;
   const dropdown = useRef(null);
   const menu = useRef(null);
@@ -151,15 +152,109 @@ const Comment = props => {
       ) : (
         <Styled.CommentTextWrapper>
           <Styled.CommentText>{text}</Styled.CommentText>
-          {photo && photo.path != '' && <img src={photo.path} width="200px" height="200px" />}
+          {/* {photo && photo.path != "" && (
+                    <img src={photo.path} width="200px" height="200px" />
+                  )}
+                  {video && video.path != "" && (
+                    <video
+                      src={video.path}
+                      width="200px"
+                      height="200px"
+                      controls
+                    />
+                  )}
+                  {etcfile && etcfile.path != "" && (
+                    <a href={etcfile.path} target="_blank">
+                      View File Here
+                    </a>
+                  )} */}
+          {photo && photo.path != '' && (
+            <a href={photo.path} target="_blank">
+              <img src={photo.path} width="200px" height="200px" />
+            </a>
+          )}
           {video && video.path != '' && (
-            <video src={video.path} width="200px" height="200px" controls />
+            <a href={video.path} target="_blank">
+              <video src={video.path} width="200px" height="200px" controls />
+            </a>
           )}
           {etcfile && etcfile.path != '' && (
             <a href={etcfile.path} target="_blank">
               View File Here
             </a>
           )}
+          {multiplefiles &&
+            multiplefiles.length > 0 &&
+            multiplefiles.map((file, i) => {
+              // if (i > 0 && i % 4 == 0) {
+              //  if (file.contentType.substring(0, file.contentType.lastIndexOf('/')) == 'image') {
+              //      ....
+              //   <br />;
+              // }
+              if (file.contentType.substring(0, file.contentType.lastIndexOf('/')) == 'image') {
+                if (i > 0 && i % 4 == 0) {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        <img src={file.path} width="200px" height="200px"></img>
+                      </a>
+                      <br />
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        <img src={file.path} width="200px" height="200px"></img>
+                      </a>
+                    </>
+                  );
+                }
+              } else if (
+                file.contentType.substring(0, file.contentType.lastIndexOf('/')) == 'video'
+              ) {
+                if (i > 0 && i % 4 == 0) {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        <video src={file.path} width="200px" height="200px" controls></video>
+                      </a>
+                      ;
+                      <br />
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        <video src={file.path} width="200px" height="200px" controls></video>
+                      </a>
+                      ;
+                    </>
+                  );
+                }
+              } else {
+                if (i > 0 && i % 4 == 0) {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        View File Here
+                      </a>
+                      <br />
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <a href={file.path} target="_blank">
+                        View File Here
+                      </a>
+                    </>
+                  );
+                }
+              }
+            })}
+
           <Styled.CommentEdited isEdited={isEdited}>(edited)</Styled.CommentEdited>
           {thread && (
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -213,6 +308,12 @@ const Comment = props => {
           setDeleteComment={setDeleteComment}
           useAvatar={useAvatar}
           chatprivate={chatprivate}
+          type={type}
+          photo={photo}
+          video={video}
+          etcfile={etcfile}
+          filetype={filetype}
+          multiplefiles={multiplefiles}
         ></DeleteComment>
       )}
     </Styled.CommentContainer>

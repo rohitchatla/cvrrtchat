@@ -29,6 +29,7 @@ const commentSchema = new mongoose.Schema({
     path: String,
     required: false,
   },
+  multiplefiles: [{ type: Object }],
 });
 
 //Creates comment model to construct documents for our database

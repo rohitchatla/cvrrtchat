@@ -4,6 +4,7 @@ import Styled from './styles/comment.styles';
 import axios from 'axios';
 import { ChatContext } from './ChatWindow';
 import { AppContext } from '../AppContainer';
+import firebase from './firebase';
 
 const DeleteComment = props => {
   const {
@@ -18,10 +19,73 @@ const DeleteComment = props => {
     setDeleteComment,
     useAvatar,
     chatprivate,
+    type,
+    photo,
+    video,
+    etcfile,
+    filetype,
+    multiplefiles,
   } = props;
   const { dispatch } = useContext(ChatContext);
   const { appState, appDispatch } = useContext(AppContext);
   const deletedId = 'deletedId';
+
+  console.log(multiplefiles);
+
+  const deleteMedia = () => {
+    const storage = firebase.storage();
+    try {
+      if (photo.path != '') {
+        let picRef = storage.refFromURL(photo.path);
+        picRef
+          .delete()
+          .then(() => {
+            console.log('Deleted1');
+          })
+          .catch(err => console.log(err));
+      }
+      if (video.path != '') {
+        let vidRef = storage.refFromURL(video.path);
+        vidRef
+          .delete()
+          .then(() => {
+            console.log('Deleted2');
+          })
+          .catch(err => console.log(err));
+      }
+
+      if (etcfile.path != '') {
+        let etcfileRef = storage.refFromURL(etcfile.path);
+        etcfileRef
+          .delete()
+          .then(() => {
+            console.log('Deleted3');
+          })
+          .catch(err => console.log(err));
+      }
+
+      if (multiplefiles.length > 0) {
+        multiplefiles.map((file, i) => {
+          let fileRef = storage.refFromURL(file.path);
+          fileRef
+            .delete()
+            .then(() => {
+              console.log('Deleted4');
+            })
+            .catch(err => console.log(err));
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    // axios
+    //   .delete(`/api/comments/checkdeletefirebase`, {
+    //     headers: { authorization: `bearer ${localStorage.authToken}` },
+    //   })
+    //   .then(() => {})
+    //   .catch(err => console.error(err));
+  };
 
   const handleDelete = e => {
     axios
@@ -29,6 +93,7 @@ const DeleteComment = props => {
         headers: { authorization: `bearer ${localStorage.authToken}` },
       })
       .then(() => {
+        deleteMedia();
         dispatch({ type: 'DELETE_FROM_DB', text });
       })
       .catch(err => console.error(err));
@@ -50,7 +115,7 @@ const DeleteComment = props => {
           });
           //console.log(result.data);
           //setAllUserMessages(result.data);
-
+          deleteMedia();
           appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
         } catch (error) {}
       })

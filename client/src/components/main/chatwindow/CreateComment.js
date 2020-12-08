@@ -20,8 +20,75 @@ const CreateComment = props => {
     video: '',
     etcfile: '',
   });
+  const [multiplefiles, setMultipleFiles] = useState([]);
 
-  const uploadUtil = text => {
+  const multipleUpload = text => {
+    const storage = firebase.storage();
+
+    let mfiles = [];
+    let cnt = 0;
+
+    try {
+      //can be written in backend(serverside) aswell
+      if (multiplefiles.length > 0) {
+        //console.log(multitplefiles);
+
+        Array.from(multiplefiles).forEach((file, i) => {
+          //console.log(i, file);
+          var storageRefFile = storage.ref(
+            `/cvrrtchat/multiple/${currentChannel.name}-${currentChannel.id}/${file.name + uuid()}`,
+          );
+          storageRefFile.put(file).then(function(snapshot) {
+            snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              let obj = {};
+              obj.data = '';
+              obj.contentType = snapshot.metadata.contentType;
+              obj.path = downloadURL;
+              mfiles.push(obj);
+
+              if (mfiles.length == multiplefiles.length) {
+                //i==multitplefiles.length-1 --> only send 1 file(cnt can also tried)
+                axios
+                  .post(
+                    '/api/comments',
+                    //postData,
+                    {
+                      multiplefiles: mfiles,
+                      user: localStorage.userId,
+                      text: text,
+                      channelID: appState.channel.id,
+                      photo: '',
+                      video: '',
+                      etcfile: '',
+                      filetype: '',
+                    },
+                    {
+                      headers: {
+                        authorization: `bearer ${localStorage.authToken}`,
+                        //'Content-Type': 'multipart/form-data', //'Content-Type': 'application/json',
+                        //Accept: 'application/json',
+                      },
+                    },
+                  )
+                  .then(() => {
+                    dispatch({ type: 'POST_TO_DB', text });
+                  })
+                  .catch(err => console.error(err));
+
+                setComment('');
+              }
+            });
+          });
+        });
+      }
+
+      //console.log(mfiles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadUtil = async text => {
     const storage = firebase.storage();
     let videourl = '';
     let photourl = '';
@@ -68,7 +135,7 @@ const CreateComment = props => {
     if (values.photo == '' && values.video == '' && values.etcfile == '') {
       //000
 
-      axios
+      await axios
         .post(
           '/api/comments',
           //postData,
@@ -394,7 +461,13 @@ const CreateComment = props => {
   };
 
   const handleSubmit = text => {
-    var obj = uploadUtil(text);
+    //console.log(multitplefiles.length);
+    if (multiplefiles.length > 0) {
+      var obj = multipleUpload(text);
+    } else {
+      var obj = uploadUtil(text);
+    }
+
     //console.log(obj);
     //var photostring = JSON.stringify(values.photo);
     //console.log(values.photo);
@@ -553,7 +626,7 @@ const CreateComment = props => {
     // }
   };
 
-  const uploadUtilPrivate = text => {
+  const uploadUtilPrivate = async text => {
     const storage = firebase.storage();
     let videourl = '';
     let photourl = '';
@@ -600,7 +673,7 @@ const CreateComment = props => {
     if (values.photo == '' && values.video == '' && values.etcfile == '') {
       //000
 
-      axios
+      await axios
         .post(
           '/api/comments/private',
           {
@@ -966,7 +1039,11 @@ const CreateComment = props => {
   };
 
   const handleSubmitPrivate = text => {
-    var obj = uploadUtilPrivate(text);
+    if (multiplefiles.length > 0) {
+      var obj = multipleUploadPrivate(text);
+    } else {
+      var obj = uploadUtilPrivate(text);
+    }
     // const storage = firebase.storage();
     // let videourl = '';
     // let photourl = '';
@@ -1129,6 +1206,77 @@ const CreateComment = props => {
     // }
   };
 
+  const multipleUploadPrivate = text => {
+    const storage = firebase.storage();
+
+    let mfiles = [];
+    let cnt = 0;
+
+    try {
+      //can be written in backend(serverside) aswell
+      if (multiplefiles.length > 0) {
+        //console.log(multitplefiles);
+
+        Array.from(multiplefiles).forEach((file, i) => {
+          //console.log(i, file);
+          var storageRefFile = storage.ref(
+            `/cvrrtchat/multiple/${currentUser.name}-${currentUser._id}/${file.name + uuid()}`,
+          );
+          storageRefFile.put(file).then(function(snapshot) {
+            snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              let obj = {};
+              obj.data = '';
+              obj.contentType = snapshot.metadata.contentType;
+              obj.path = downloadURL;
+              mfiles.push(obj);
+
+              if (mfiles.length == multiplefiles.length) {
+                //i==multitplefiles.length-1 --> only send 1 file(cnt can also tried)
+                axios
+                  .post(
+                    '/api/comments/private',
+                    {
+                      multiplefiles: mfiles,
+                      userfrom: localStorage.userId,
+                      userto: currentUser,
+                      text: text,
+                      photo: '',
+                      video: '',
+                      etcfile: '',
+                      filetype: '',
+                    },
+                    {
+                      headers: { authorization: `bearer ${localStorage.authToken}` },
+                    },
+                  )
+                  .then(async () => {
+                    dispatch({ type: 'POST_TO_DB', text });
+
+                    try {
+                      const result = await axios('/api/comments/allmsgs', {
+                        headers: { authorization: `bearer ${localStorage.authToken}` },
+                      });
+                      //console.log(result.data);
+                      //setAllUserMessages(result.data);
+
+                      appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                    } catch (error) {}
+                  })
+                  .catch(err => console.error(err));
+
+                setComment('');
+              }
+            });
+          });
+        });
+      }
+
+      //console.log(mfiles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleEnter = event => {
     if (event.keyCode === 13) {
       event.preventDefault();
@@ -1151,6 +1299,13 @@ const CreateComment = props => {
         ? event.target.files[0]
         : event.target.value;
     setValues({ ...values, [name]: value });
+
+    if (name == 'multiplefiles') {
+      //console.log(event.target.files);
+      setMultipleFiles(event.target.files);
+    }
+
+    //console.log(multiplefiles);
   };
 
   return (
@@ -1168,6 +1323,13 @@ const CreateComment = props => {
           accept="file_extension|audio/*|video/*|image/*|media_type"
           onChange={handleChange('etcfile')}
           type="file"
+        />
+        {'Multiple Files'}
+        <input
+          accept="file_extension|audio/*|video/*|image/*|media_type"
+          onChange={handleChange('multiplefiles')}
+          type="file"
+          multiple
         />
       </Styled.CommentForm>
     </Styled.CommentFormWrapper>
