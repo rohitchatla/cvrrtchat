@@ -98,6 +98,16 @@ const channelRouter = io => {
             etcfile: eachComment.etcfile,
             filetype: eachComment.filetype,
             multiplefiles: eachComment.multiplefiles,
+            replybool: eachComment.replybool,
+            replymsg: eachComment.replymsg,
+            replydetails: eachComment.replydetails,
+            forwardbool: eachComment.forwardbool,
+            forwardmsg: eachComment.forwardmsg,
+            forwardpayload: eachComment.forwardpayload,
+            replyfromid: eachComment.replyfromid,
+            forwardfromid: eachComment.forwardfromid,
+            forwardmsgbool: eachComment.forwardmsgbool,
+            forwardmsgdetails: eachComment.forwardmsgdetails,
           });
 
           return {

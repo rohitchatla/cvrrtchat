@@ -142,6 +142,16 @@ const ViewComments = props => {
                 etcfile={msg.etcfile}
                 filetype={msg.filetype}
                 multiplefiles={msg.multiplefiles}
+                replybool={msg.replybool}
+                replymsg={msg.replymsg}
+                replydetails={msg.replydetails}
+                forwardpayload={msg.forwardpayload}
+                forwardbool={msg.forwardbool}
+                forwardmsg={msg.forwardmsg}
+                replyfromid={msg.replyfromid}
+                forwardfromid={msg.forwardfromid}
+                forwardmsgbool={msg.forwardmsgbool}
+                forwardmsgdetails={msg.forwardmsgdetails}
               ></Comment>
             );
         })
@@ -171,6 +181,16 @@ const ViewComments = props => {
               etcfile={comment.etcfile}
               filetype={comment.filetype}
               multiplefiles={comment.multiplefiles}
+              replybool={comment.replybool}
+              replydetails={comment.replydetails}
+              forwardpayload={comment.forwardpayload}
+              replymsg={comment.replymsg}
+              forwardbool={comment.forwardbool}
+              forwardmsg={comment.forwardmsg}
+              replyfromid={comment.replyfromid}
+              forwardfromid={comment.forwardfromid}
+              forwardmsgbool={comment.forwardmsgbool}
+              forwardmsgdetails={comment.forwardmsgdetails}
             ></Comment>
           );
         })

@@ -25,6 +25,12 @@ const DeleteComment = props => {
     etcfile,
     filetype,
     multiplefiles,
+    replybool,
+    replymsg,
+    forwardbool,
+    forwardmsg,
+    forwardmsgbool,
+    forwardmsgdetails,
   } = props;
   const { dispatch } = useContext(ChatContext);
   const { appState, appDispatch } = useContext(AppContext);
@@ -35,7 +41,7 @@ const DeleteComment = props => {
   const deleteMedia = () => {
     const storage = firebase.storage();
     try {
-      if (photo.path != '') {
+      if (!forwardmsgbool && !forwardbool && !replymsg && photo.path != '') {
         let picRef = storage.refFromURL(photo.path);
         picRef
           .delete()
@@ -44,7 +50,7 @@ const DeleteComment = props => {
           })
           .catch(err => console.log(err));
       }
-      if (video.path != '') {
+      if (!forwardmsgbool && !forwardbool && !replymsg && video.path != '') {
         let vidRef = storage.refFromURL(video.path);
         vidRef
           .delete()
@@ -54,7 +60,7 @@ const DeleteComment = props => {
           .catch(err => console.log(err));
       }
 
-      if (etcfile.path != '') {
+      if (!forwardmsgbool && !forwardbool && !replymsg && etcfile.path != '') {
         let etcfileRef = storage.refFromURL(etcfile.path);
         etcfileRef
           .delete()
@@ -64,7 +70,7 @@ const DeleteComment = props => {
           .catch(err => console.log(err));
       }
 
-      if (multiplefiles.length > 0) {
+      if (!forwardmsgbool && !forwardbool && !replymsg && multiplefiles.length > 0) {
         multiplefiles.map((file, i) => {
           let fileRef = storage.refFromURL(file.path);
           fileRef

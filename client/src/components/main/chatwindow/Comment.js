@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from '../../../theme/theme';
 import ReplyAvatar from './ReplyAvatar';
+import axios from 'axios';
 
 //Receives UTC date and returns time and date in local twelve-hour time
 
@@ -88,6 +89,16 @@ const Comment = props => {
     etcfile,
     filetype,
     multiplefiles,
+    replybool,
+    replymsg,
+    replydetails,
+    forwardpayload,
+    forwardbool,
+    forwardmsg,
+    replyfromid,
+    forwardfromid,
+    forwardmsgbool,
+    forwardmsgdetails,
   } = props;
   const dropdown = useRef(null);
   const menu = useRef(null);
@@ -107,6 +118,195 @@ const Comment = props => {
   const handleEditComment = e => {
     setEditComment(!editComment);
     setIsHidden(!isHidden);
+  };
+
+  const handleReplyPrivately = e => {
+    let payload = {
+      id,
+      name,
+      date,
+      text,
+      user_id,
+      userImage,
+      isEdited,
+      thread,
+      channelID,
+      chatprivate,
+      type,
+      photo,
+      video,
+      etcfile,
+      filetype,
+      multiplefiles,
+      replybool,
+      replymsg,
+      replydetails,
+      forwardbool,
+      forwardmsg,
+      replyfromid,
+      forwardfromid,
+      forwardmsgbool,
+      forwardmsgdetails,
+    };
+    localStorage.setItem('replyppayload', JSON.stringify(payload)); //or can have a field in db for forwards
+    localStorage.setItem('replyprivately', text);
+    localStorage.setItem('replyfromid', user_id);
+    window.location.reload();
+  };
+
+  const handleForward = e => {
+    let payload = {
+      id,
+      name,
+      date,
+      text,
+      user_id,
+      userImage,
+      isEdited,
+      thread,
+      channelID,
+      chatprivate,
+      type,
+      photo,
+      video,
+      etcfile,
+      filetype,
+      multiplefiles,
+      replybool,
+      replymsg,
+      replydetails,
+      forwardbool,
+      forwardmsg,
+      replyfromid,
+      forwardfromid,
+      forwardmsgbool,
+      forwardmsgdetails,
+    };
+    localStorage.setItem('forwardpayload', JSON.stringify(forwardpayload));
+    localStorage.setItem('forwardmsg', text);
+    localStorage.setItem('forwardfromid', user_id);
+  };
+
+  const handleForwardMsg = async e => {
+    const channeloruserbool = prompt('Channel(c)/User(u)');
+    const toid = prompt('To:');
+    const customtext = prompt('Customtext:');
+    let payload = {
+      id,
+      name,
+      date,
+      text,
+      user_id,
+      userImage,
+      isEdited,
+      thread,
+      channelID,
+      chatprivate,
+      type,
+      photo,
+      video,
+      etcfile,
+      filetype,
+      multiplefiles,
+      replybool,
+      replymsg,
+      forwardbool,
+      forwardmsg,
+      replyfromid,
+      forwardfromid,
+      forwardmsgbool,
+      forwardmsgdetails,
+    };
+    // let payload = {
+    //   id: id,
+    //   name: name,
+    //   date: date,
+    //   text: text,
+    //   user_id: user_id,
+    //   userImage: userImage,
+    //   isEdited: isEdited,
+    //   thread: thread,
+    //   channelID: channelID,
+    //   chatprivate: chatprivate,
+    //   type: type,
+    //   photo: photo,
+    //   video: video,
+    //   etcfile: etcfile,
+    //   filetype: filetype,
+    //   multiplefiles: multiplefiles,
+    // replybool,
+    //   replymsg,
+    //   forwardbool,
+    //   forwardmsg,
+    //   forwardmsgbool,
+    //   forwardmsgdetails,
+    // };
+    // payload.id = id;
+    // payload.name = name;
+    // payload.date = date;
+    // payload.text = text;
+    // payload.user_id = user_id;
+    // payload.userImage = userImage;
+    // payload.isEdited = isEdited;
+    // payload.thread = thread;
+    // payload.channelID = channelID;
+    // payload.chatprivate = chatprivate;
+    // payload.type = type;
+    // payload.photo = photo;
+    // payload.video = video;
+    // payload.etcfile = etcfile;
+    // payload.filetype = filetype;
+    // payload.multiplefiles = multiplefiles;
+    // payload.replybool = replybool;
+    // payload.replymsg = replymsg;
+    // payload.forwardbool = forwardbool;
+    // payload.forwardmsg = forwardmsg;
+    // payload.forwardmsgbool = forwardmsgbool;
+    // payload.forwardmsgdetails = forwardmsgdetails;
+
+    try {
+      //console.log('ping');
+      await axios
+        .post(
+          '/api/comments/forwardmsg',
+          {
+            channeloruserbool,
+            toid,
+            customtext,
+            payload,
+            fromid: localStorage.getItem('userId'),
+            // id: id,
+            // name: name,
+            // date: date,
+            // text: text,
+            // user_id: user_id,
+            // userImage: userImage,
+            // isEdited: isEdited,
+            // thread: thread,
+            // channelID: channelID,
+            // chatprivate: chatprivate,
+            // type: type,
+            // photo: photo,
+            // video: video,
+            // etcfile: etcfile,
+            // filetype: filetype,
+            // multiplefiles: multiplefiles,
+            // replybool:replybool,
+            // replymsg:replymsg,
+            // forwardbool:forwardbool,
+            // forwardmsg:forwardmsg,
+            // forwardmsgbool:forwardmsgbool,
+            // forwardmsgdetails:forwardmsgdetails,
+          },
+          {
+            headers: { authorization: `bearer ${localStorage.authToken}` },
+          },
+        )
+        .then(async () => {})
+        .catch(err => console.error(err));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDeleteComment = e => {
@@ -151,7 +351,7 @@ const Comment = props => {
         </StyledEditComment>
       ) : (
         <Styled.CommentTextWrapper>
-          <Styled.CommentText>{text}</Styled.CommentText>
+          <Styled.CommentText>{text != '' ? text : forwardmsgdetails[0].text}</Styled.CommentText>
           {/* {photo && photo.path != "" && (
                     <img src={photo.path} width="200px" height="200px" />
                   )}
@@ -168,6 +368,7 @@ const Comment = props => {
                       View File Here
                     </a>
                   )} */}
+
           {photo && photo.path != '' && (
             <a href={photo.path} target="_blank">
               <img src={photo.path} width="200px" height="200px" />
@@ -255,6 +456,38 @@ const Comment = props => {
               }
             })}
 
+          {/* {forwardmsgbool && <p>Forwared</p>} */}
+
+          {forwardmsgbool && (
+            <button
+              onClick={() => {
+                alert(JSON.stringify(forwardmsgdetails));
+              }}
+            >
+              Forwared For: {forwardmsgdetails[0].text}
+            </button>
+          )}
+
+          {replybool && (
+            <button
+              onClick={() => {
+                alert(JSON.stringify(replydetails));
+              }}
+            >
+              Replied For: {replymsg}
+            </button>
+          )}
+
+          {forwardbool && (
+            <button
+              onClick={() => {
+                alert(JSON.stringify(forwardpayload));
+              }}
+            >
+              Forwarded For: {forwardmsg}
+            </button>
+          )}
+
           <Styled.CommentEdited isEdited={isEdited}>(edited)</Styled.CommentEdited>
           {thread && (
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -289,6 +522,9 @@ const Comment = props => {
       {!isHidden && (
         <Styled.CommentDropdown ref={dropdown} pos={() => getMenuPos(menu)}>
           <Styled.MenuButton onClick={handleEditComment}>Edit Comment</Styled.MenuButton>
+          <Styled.MenuButton onClick={handleReplyPrivately}>Reply Privately</Styled.MenuButton>
+          <Styled.MenuButton onClick={handleForward}>Forward</Styled.MenuButton>
+          <Styled.MenuButton onClick={() => handleForwardMsg()}>Forward Msg</Styled.MenuButton>
           <Styled.MenuDeleteButton onClick={handleDeleteComment}>
             Delete Comment
           </Styled.MenuDeleteButton>
@@ -330,7 +566,7 @@ const GroupButton = styled.div`
   border: 0.5px solid lightgray;
   position: absolute;
   top: -1.5rem;
-  right: 3rem;
+  right: 4rem;
   border-radius: 10%;
   background: rgb(224, 224, 224);
 `;

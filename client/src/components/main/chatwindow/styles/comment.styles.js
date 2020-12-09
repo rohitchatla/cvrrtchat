@@ -77,8 +77,7 @@ const CommentMenu = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   width: 3rem;
-  transition: all 80ms linear;
-
+  transition: all 80ms linear; //right: 4rem
   &:hover {
     & > div {
       visibility: visible;
@@ -98,7 +97,7 @@ const CommentKebab = styled.figure`
 const CommentDropdown = styled.div`
   display: flex;
   flex-flow: column wrap;
-  border: 0.1rem solid rgb(29, 28, 29);
+  border: 0.1rem solid rgb(29, 28, 255); //3->29
   grid-area: 2/3/2/4;
   height: 4rem;
   width: 12rem;
@@ -108,7 +107,7 @@ const CommentDropdown = styled.div`
   border-radius: 0.4rem;
   position: absolute;
   top: ${props => props.pos - 1}px;
-  right: 5rem;
+  right: 25rem; //5rem
 `;
 
 const Button = styled.button`

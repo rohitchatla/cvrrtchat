@@ -209,9 +209,56 @@ Return response containing new comment in JSON
                   etcfile.contentType = req.body.filetype.filetypee; //'application/zip/etc';
                   etcfile.path = req.body.etcfile;
 
+                  let replybool = false;
+                  let forwardbool = false;
+                  let replymsg;
+                  let forwardmsg;
+                  let replydetails;
+                  let forwardpayload;
+                  let replyfromid = [];
+                  let forwardfromid = [];
+
+                  if (req.body.replyp != '') {
+                    replybool = true;
+                    replymsg = req.body.replyp;
+                  }
+                  //console.log('s ' + req.body.replypayload);
+                  if (req.body.replypayload != '') {
+                    // console.log(req.body.replypayload);
+                    // console.log(JSON.parse(req.body.replypayload));
+                    replybool = true;
+                    replydetails = JSON.parse(req.body.replypayload);
+                  }
+
+                  if (req.body.forward != '') {
+                    forwardbool = true;
+                    forwardmsg = req.body.forward;
+                  }
+
+                  if (req.body.forwardpayload != '') {
+                    forwardbool = true;
+                    forwardpayload = JSON.parse(req.body.forwardpayload);
+                  }
+
+                  if (req.body.replyfromid != '') {
+                    replyfromid.push(req.body.replyfromid);
+                  }
+
+                  if (req.body.forwardfromid != '') {
+                    forwardfromid.push(req.body.forwardfromid);
+                  }
+
                   Comment.create({
                     user: user._id,
                     text,
+                    replybool,
+                    forwardbool,
+                    replymsg,
+                    replydetails,
+                    forwardmsg,
+                    forwardpayload,
+                    replyfromid,
+                    forwardfromid,
                     date,
                     photo,
                     video,
@@ -298,6 +345,118 @@ render() {
 export default Image;
     */
   );
+
+  router.post('/forwardmsg', async (req, res) => {
+    //console.log(req.body);
+    if (req.body.channeloruserbool == 'c') {
+      Channel.findById(req.body.toid).then(channel => {
+        if (!channel) {
+          return res.status(404).json({ Error: 'Channel not found' });
+        }
+        let fmsgdetails = [];
+        fmsgdetails.push(req.body.payload);
+        // Comment.findById(req.body.payload.id).then(async comment => {
+        //   //getting msg using :id
+        //   let obj = comment;
+        //   //console.log(obj);
+        //   obj.forwardmsgbool = true;
+        //   obj.forwardmsgdetails.push(comment);
+        //   obj.date = new Date();
+        //   obj.user = req.body.fromid;
+        //   const commentnew = new Comment({
+        //     ...comment,
+        //     text: comment.text,
+        //   });
+
+        //   try {
+        //     await commentnew.save().then(() => {
+        //       channel.comments.push(_id);
+        //       channel.save();
+        //     });
+        //     //res.status(201).send(commentnew);
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // Comment.create().then(comment => {
+        //   const { date, _id, text } = comment;
+        //   channel.comments.push(_id);
+        //   channel.save();
+        //   //return comment;
+        // });
+        //});
+        Comment.create({
+          user: req.body.fromid,
+          text: req.body.customtext, //req.body.customtext ? req.body.customtext : req.body.payload.text,
+          replybool: req.body.payload.replybool,
+          forwardbool: req.body.payload.forwardbool,
+          replymsg: req.body.payload.replymsg,
+          replydetails: req.body.payload.replydetails,
+          forwardmsg: req.body.payload.forwardmsg,
+          forwardpayload: req.body.payload.forwardpayload,
+          replyfromid: req.body.payload.replyfromid,
+          forwardfromid: req.body.payload.forwardfromid,
+          forwardmsgbool: true,
+          forwardmsgdetails: fmsgdetails,
+          date: req.body.payload.date,
+          photo: req.body.payload.photo,
+          video: req.body.payload.video,
+          type: 'all',
+          etcfile: req.body.payload.etcfile,
+          filetype: req.body.payload.filetype,
+          multiplefiles: req.body.payload.multiplefiles,
+        }).then(comment => {
+          const { date, _id, text } = comment;
+          channel.comments.push(_id);
+          channel.save();
+          // res.status(201).json({
+          //   date,
+          //   _id,
+          //   text,
+          //   user: user.name,
+          //   channelID,
+          // });
+          //return comment;
+        });
+      });
+    } else {
+      //"u"
+      let fmsgdetails = [];
+      fmsgdetails.push(req.body.payload);
+      User.findById(req.body.fromid).then(ufrom => {
+        User.findById(req.body.toid).then(uto => {
+          Usermsg.create({
+            userfrom: ufrom,
+            text: req.body.customtext, //req.body.customtext ? req.body.customtext : req.body.payload.text,
+            replybool: req.body.payload.replybool,
+            forwardbool: req.body.payload.forwardbool,
+            replymsg: req.body.payload.replymsg,
+            replydetails: req.body.payload.replydetails,
+            forwardmsg: req.body.payload.forwardmsg,
+            forwardpayload: req.body.payload.forwardpayload,
+            replyfromid: req.body.payload.replyfromid,
+            forwardfromid: req.body.payload.forwardfromid,
+            forwardmsgbool: true,
+            forwardmsgdetails: fmsgdetails,
+            userto: uto,
+            date: req.body.payload.date,
+            photo: req.body.payload.photo,
+            video: req.body.payload.video,
+            type: 'all',
+            etcfile: req.body.payload.etcfile,
+            filetype: req.body.payload.filetype,
+            multiplefiles: req.body.payload.multiplefiles,
+          })
+            .then(msg => {
+              //console.log(msg);
+              //res.send(msg);
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        });
+      });
+    }
+  });
 
   router.post('/private/g', (req, res) => {
     //not in running mode(this route)
@@ -471,12 +630,57 @@ export default Image;
       etcfile.contentType = req.body.filetype.filetypee; //'application/zip/etc';
       etcfile.path = req.body.etcfile;
 
+      let replybool = false;
+      let forwardbool = false;
+      let replymsg;
+      let forwardmsg;
+      let replydetails;
+      let forwardpayload;
+      let replyfromid = [];
+      let forwardfromid = [];
+
+      if (req.body.replyp != '') {
+        replybool = true;
+        replymsg = req.body.replyp;
+      }
+
+      if (req.body.replypayload != '') {
+        replybool = true;
+        replydetails = JSON.parse(req.body.replypayload);
+      }
+
+      if (req.body.forward != '') {
+        forwardbool = true;
+        forwardmsg = req.body.forward;
+      }
+
+      if (req.body.forwardpayload != '') {
+        forwardbool = true;
+        forwardpayload = JSON.parse(req.body.forwardpayload);
+      }
+
+      if (req.body.replyfromid != '') {
+        replyfromid.push(req.body.replyfromid);
+      }
+
+      if (req.body.forwardfromid != '') {
+        forwardfromid.push(req.body.forwardfromid);
+      }
+
       try {
         User.findById(userfrom).then(ufrom => {
           User.findById(userto).then(uto => {
             Usermsg.create({
               userfrom: ufrom,
               text,
+              replybool,
+              forwardbool,
+              replymsg,
+              replydetails,
+              forwardmsg,
+              forwardpayload,
+              replyfromid,
+              forwardfromid,
               userto: uto,
               photo,
               video,

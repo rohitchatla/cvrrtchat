@@ -12,6 +12,12 @@ Posts new comment to database when enter key pressed and triggers re-render by u
 
 const CreateComment = props => {
   const [comment, setComment] = useState('');
+  const [replyp, setreplyp] = useState(localStorage.getItem('replyprivately'));
+  const [forward, setforward] = useState(localStorage.getItem('forwardmsg'));
+  const [replypayload, setreplypayload] = useState(localStorage.getItem('replyppayload'));
+  const [forwardpayload, setforwardpayload] = useState(localStorage.getItem('forwardpayload'));
+  const [replyfromid, setreplyfromid] = useState(localStorage.getItem('replyfromid'));
+  const [forwardfromid, setforwardfromid] = useState(localStorage.getItem('forwardfromid'));
   const { appState, appDispatch } = useContext(AppContext);
   const { dispatch } = useContext(ChatContext);
   const { currentChannel, checkprivate, currentUser } = props;
@@ -21,6 +27,15 @@ const CreateComment = props => {
     etcfile: '',
   });
   const [multiplefiles, setMultipleFiles] = useState([]);
+
+  const resetLocalStorage = () => {
+    localStorage.setItem('replyppayload', ''); //or can have a field in db for forwards
+    localStorage.setItem('replyprivately', '');
+    localStorage.setItem('replyfromid', '');
+    localStorage.setItem('forwardmsg', '');
+    localStorage.setItem('forwardpayload', '');
+    localStorage.setItem('forwardfromid', '');
+  };
 
   const multipleUpload = text => {
     const storage = firebase.storage();
@@ -56,6 +71,12 @@ const CreateComment = props => {
                       multiplefiles: mfiles,
                       user: localStorage.userId,
                       text: text,
+                      replyp: replyp,
+                      replypayload: replypayload,
+                      forwardpayload: forwardpayload,
+                      forward: forward,
+                      replyfromid: replyfromid,
+                      forwardfromid: forwardfromid,
                       channelID: appState.channel.id,
                       photo: '',
                       video: '',
@@ -72,6 +93,7 @@ const CreateComment = props => {
                   )
                   .then(() => {
                     dispatch({ type: 'POST_TO_DB', text });
+                    resetLocalStorage();
                   })
                   .catch(err => console.error(err));
 
@@ -142,6 +164,12 @@ const CreateComment = props => {
           {
             user: localStorage.userId,
             text: text,
+            replyp: replyp,
+            replypayload: replypayload,
+            forwardpayload: forwardpayload,
+            forward: forward,
+            replyfromid: replyfromid,
+            forwardfromid: forwardfromid,
             channelID: appState.channel.id,
             photo: '',
             video: '',
@@ -158,6 +186,7 @@ const CreateComment = props => {
         )
         .then(() => {
           dispatch({ type: 'POST_TO_DB', text });
+          resetLocalStorage();
         })
         .catch(err => console.error(err));
 
@@ -179,6 +208,12 @@ const CreateComment = props => {
               {
                 user: localStorage.userId,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 channelID: appState.channel.id,
                 photo: '',
                 video: '',
@@ -195,6 +230,7 @@ const CreateComment = props => {
             )
             .then(() => {
               dispatch({ type: 'POST_TO_DB', text });
+              resetLocalStorage();
             })
             .catch(err => console.error(err));
 
@@ -215,6 +251,12 @@ const CreateComment = props => {
               {
                 user: localStorage.userId,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 channelID: appState.channel.id,
                 photo: '',
                 video: videourl,
@@ -231,6 +273,7 @@ const CreateComment = props => {
             )
             .then(() => {
               dispatch({ type: 'POST_TO_DB', text });
+              resetLocalStorage();
             })
             .catch(err => console.error(err));
 
@@ -257,6 +300,12 @@ const CreateComment = props => {
                   {
                     user: localStorage.userId,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     channelID: appState.channel.id,
                     photo: '',
                     video: videourl,
@@ -273,6 +322,7 @@ const CreateComment = props => {
                 )
                 .then(() => {
                   dispatch({ type: 'POST_TO_DB', text });
+                  resetLocalStorage();
                 })
                 .catch(err => console.error(err));
 
@@ -295,6 +345,12 @@ const CreateComment = props => {
               {
                 user: localStorage.userId,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 channelID: appState.channel.id,
                 photo: photourl,
                 video: '',
@@ -311,6 +367,7 @@ const CreateComment = props => {
             )
             .then(() => {
               dispatch({ type: 'POST_TO_DB', text });
+              resetLocalStorage();
             })
             .catch(err => console.error(err));
 
@@ -337,6 +394,12 @@ const CreateComment = props => {
                   {
                     user: localStorage.userId,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     channelID: appState.channel.id,
                     photo: photourl,
                     video: '',
@@ -353,6 +416,7 @@ const CreateComment = props => {
                 )
                 .then(() => {
                   dispatch({ type: 'POST_TO_DB', text });
+                  resetLocalStorage();
                 })
                 .catch(err => console.error(err));
 
@@ -380,6 +444,12 @@ const CreateComment = props => {
                   {
                     user: localStorage.userId,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     channelID: appState.channel.id,
                     photo: photourl,
                     video: videourl,
@@ -396,6 +466,7 @@ const CreateComment = props => {
                 )
                 .then(() => {
                   dispatch({ type: 'POST_TO_DB', text });
+                  resetLocalStorage();
                 })
                 .catch(err => console.error(err));
 
@@ -429,6 +500,12 @@ const CreateComment = props => {
                       {
                         user: localStorage.userId,
                         text: text,
+                        replyp: replyp,
+                        replypayload: replypayload,
+                        forwardpayload: forwardpayload,
+                        forward: forward,
+                        replyfromid: replyfromid,
+                        forwardfromid: forwardfromid,
                         channelID: appState.channel.id,
                         photo: photourl,
                         video: videourl,
@@ -445,6 +522,7 @@ const CreateComment = props => {
                     )
                     .then(() => {
                       dispatch({ type: 'POST_TO_DB', text });
+                      resetLocalStorage();
                     })
                     .catch(err => console.error(err));
 
@@ -680,6 +758,12 @@ const CreateComment = props => {
             userfrom: localStorage.userId,
             userto: currentUser,
             text: text,
+            replyp: replyp,
+            replypayload: replypayload,
+            forwardpayload: forwardpayload,
+            forward: forward,
+            replyfromid: replyfromid,
+            forwardfromid: forwardfromid,
             photo: '',
             video: '',
             etcfile: '',
@@ -700,6 +784,7 @@ const CreateComment = props => {
             //setAllUserMessages(result.data);
 
             appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+            resetLocalStorage();
           } catch (error) {}
         })
         .catch(err => console.error(err));
@@ -722,6 +807,12 @@ const CreateComment = props => {
                 userfrom: localStorage.userId,
                 userto: currentUser,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 photo: '',
                 video: '',
                 etcfile: etcfileurl,
@@ -742,6 +833,7 @@ const CreateComment = props => {
                 //setAllUserMessages(result.data);
 
                 appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                resetLocalStorage();
               } catch (error) {}
             })
             .catch(err => console.error(err));
@@ -763,6 +855,12 @@ const CreateComment = props => {
                 userfrom: localStorage.userId,
                 userto: currentUser,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 photo: '',
                 video: videourl,
                 etcfile: '',
@@ -783,6 +881,7 @@ const CreateComment = props => {
                 //setAllUserMessages(result.data);
 
                 appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                resetLocalStorage();
               } catch (error) {}
             })
             .catch(err => console.error(err));
@@ -810,6 +909,12 @@ const CreateComment = props => {
                     userfrom: localStorage.userId,
                     userto: currentUser,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     photo: '',
                     video: videourl,
                     etcfile: etcfileurl,
@@ -830,6 +935,7 @@ const CreateComment = props => {
                     //setAllUserMessages(result.data);
 
                     appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                    resetLocalStorage();
                   } catch (error) {}
                 })
                 .catch(err => console.error(err));
@@ -853,6 +959,12 @@ const CreateComment = props => {
                 userfrom: localStorage.userId,
                 userto: currentUser,
                 text: text,
+                replyp: replyp,
+                replypayload: replypayload,
+                forwardpayload: forwardpayload,
+                forward: forward,
+                replyfromid: replyfromid,
+                forwardfromid: forwardfromid,
                 photo: photourl,
                 video: '',
                 etcfile: '',
@@ -873,6 +985,7 @@ const CreateComment = props => {
                 //setAllUserMessages(result.data);
 
                 appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                resetLocalStorage();
               } catch (error) {}
             })
             .catch(err => console.error(err));
@@ -900,6 +1013,12 @@ const CreateComment = props => {
                     userfrom: localStorage.userId,
                     userto: currentUser,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     photo: photourl,
                     video: '',
                     etcfile: etcfileurl,
@@ -920,6 +1039,7 @@ const CreateComment = props => {
                     //setAllUserMessages(result.data);
 
                     appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                    resetLocalStorage();
                   } catch (error) {}
                 })
                 .catch(err => console.error(err));
@@ -948,6 +1068,12 @@ const CreateComment = props => {
                     userfrom: localStorage.userId,
                     userto: currentUser,
                     text: text,
+                    replyp: replyp,
+                    replypayload: replypayload,
+                    forwardpayload: forwardpayload,
+                    forward: forward,
+                    replyfromid: replyfromid,
+                    forwardfromid: forwardfromid,
                     photo: photourl,
                     video: videourl,
                     etcfile: '',
@@ -968,6 +1094,7 @@ const CreateComment = props => {
                     //setAllUserMessages(result.data);
 
                     appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                    resetLocalStorage();
                   } catch (error) {}
                 })
                 .catch(err => console.error(err));
@@ -1002,6 +1129,12 @@ const CreateComment = props => {
                         userfrom: localStorage.userId,
                         userto: currentUser,
                         text: text,
+                        replyp: replyp,
+                        replypayload: replypayload,
+                        forwardpayload: forwardpayload,
+                        forward: forward,
+                        replyfromid: replyfromid,
+                        forwardfromid: forwardfromid,
                         photo: photourl,
                         video: videourl,
                         etcfile: etcfileurl,
@@ -1022,6 +1155,7 @@ const CreateComment = props => {
                         //setAllUserMessages(result.data);
 
                         appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                        resetLocalStorage();
                       } catch (error) {}
                     })
                     .catch(err => console.error(err));
@@ -1240,6 +1374,12 @@ const CreateComment = props => {
                       userfrom: localStorage.userId,
                       userto: currentUser,
                       text: text,
+                      replyp: replyp,
+                      replypayload: replypayload,
+                      forwardpayload: forwardpayload,
+                      forward: forward,
+                      replyfromid: replyfromid,
+                      forwardfromid: forwardfromid,
                       photo: '',
                       video: '',
                       etcfile: '',
@@ -1260,6 +1400,7 @@ const CreateComment = props => {
                       //setAllUserMessages(result.data);
 
                       appDispatch({ type: 'SET_USER_MSG', usermsgs: result.data });
+                      resetLocalStorage();
                     } catch (error) {}
                   })
                   .catch(err => console.error(err));
@@ -1290,7 +1431,33 @@ const CreateComment = props => {
   };
 
   const handleOnChange = event => {
+    // localStorage.getItem('replyprivately') != '' &&
+    // currentUser &&
+    // localStorage.getItem('replyfromid') == currentUser._id
+    //   ? localStorage.getItem('replyprivately') + ' --> ' + comment
+    //   : comment;
+    // let comment = '';
+    // if (
+    //   localStorage.getItem('replyprivately') != '' &&
+    //   currentUser &&
+    //   localStorage.getItem('replyfromid') == currentUser._id
+    // ) {
+    //   comment = localStorage.getItem('replyprivately') + ' --> ' + event.target.value;
+    // } else {
+    //   comment = event.target.value;
+    // }
     setComment(event.target.value);
+    //setComment(comment);
+  };
+
+  const handleReplyPChange = event => {
+    setreplyp(event.target.value);
+    localStorage.setItem('replyprivately', event.target.value);
+  };
+
+  const handleForwardChange = event => {
+    setforward(event.target.value);
+    localStorage.setItem('forwardmsg', event.target.value);
   };
 
   const handleChange = name => event => {
@@ -1307,10 +1474,30 @@ const CreateComment = props => {
 
     //console.log(multiplefiles);
   };
-
   return (
     <Styled.CommentFormWrapper>
       <Styled.CommentForm>
+        {replyp && (
+          <>
+            <p>replyprivately:</p>
+            <Styled.CommentTextArea
+              onChange={handleReplyPChange}
+              //onKeyDown={handleEnter}
+              value={replyp}
+            />
+          </>
+        )}
+        {forward && (
+          <>
+            <p>forward:</p>
+            <Styled.CommentTextArea
+              onChange={handleForwardChange}
+              //onKeyDown={handleEnter}
+              value={forward}
+            />
+          </>
+        )}
+        <button onClick={() => resetLocalStorage()}>Clean Parameters(Ls)</button>
         <Styled.CommentTextArea onChange={handleOnChange} onKeyDown={handleEnter} value={comment} />
         <br />
         <br />

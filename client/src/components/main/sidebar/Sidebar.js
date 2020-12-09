@@ -194,6 +194,10 @@ function Sidebar(props) {
       });
       socket.emit('joinChannel', { currentChannelID, allChannelIDs });
     }
+
+    //if (localStorage.getItem('replyfromid') != '') {
+    //setCurrentUserID(localStorage.getItem('replyfromid'));
+    //}
   }, [socket, currentChannelID, allChannels]);
 
   return (

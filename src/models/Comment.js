@@ -30,6 +30,20 @@ const commentSchema = new mongoose.Schema({
     required: false,
   },
   multiplefiles: [{ type: Object }],
+
+  replybool: { type: Boolean, default: false },
+  replydetails: { type: Object },
+  replymsg: { type: String, default: '' },
+  replyfromid: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }], //just like that(clone of user_id msg-->reply for which message(user_id), to_id is sent like normal message as it is same routine channel or usermsg )
+
+  forwardbool: { type: Boolean, default: false },
+  forwardmsg: { type: String, default: '' },
+  forwardpayload: { type: Object },
+  forwardfromid: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }], //just like that(clone of user_id msg-->reply for which message(user_id), to_id is sent like normal message as it is same routine channel or usermsg )
+
+  forwardmsgbool: { type: Boolean, default: false },
+  forwardmsgdetails: [{ type: Object }],
+  //customtextbool: { type: Boolean, default: false },//but here used text & forwardmsgdetails.text with checking for forwarded msgs
 });
 
 //Creates comment model to construct documents for our database
