@@ -120,7 +120,7 @@ function Channels(props) {
           headers: { authorization: `bearer ${localStorage.authToken}` },
         },
       );
-      console.log(result.data);
+      //console.log(result.data);
       setAllNotifssent(result.data);
     } catch (error) {
       console.log('allnotifs error: ', error);
@@ -137,7 +137,7 @@ function Channels(props) {
           headers: { authorization: `bearer ${localStorage.authToken}` },
         },
       );
-      console.log(result.data);
+      //console.log(result.data);
       setAllNotifsreceived(result.data);
     } catch (error) {
       console.log('allnotifs error: ', error);

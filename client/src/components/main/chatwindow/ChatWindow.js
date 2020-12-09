@@ -100,7 +100,7 @@ const ChatWindow = props => {
   return (
     <ChatContext.Provider value={{ chatState, dispatch }}>
       <Container>
-        {console.log(props.currentChannel)}
+        {/* {console.log(props.currentChannel)} */}
         <Header>
           #{' '}
           {props.currentChannel.private

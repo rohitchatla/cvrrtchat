@@ -169,8 +169,9 @@ Return response containing new comment in JSON
                   //     photo.path = photoobj.path;
                   //   }
                   // }
-
-                  // let form = new formidable.IncomingForm();
+                  //we did forwarding(where multimedia links are not duplicated in firebase so deletion check is taken care --> not to delete multimedia of shared but to delete for original in client)
+                  //implemented gcp firebase routines in client as in backend(firebase functions can be, with service key gcloud lib can be done, firebase-admin can be done)
+                  // let form = new formidable.IncomingForm();//need to send in Formdata from client for this and multer(single or multiple file upload)-->multer stores in dest add and formidable default stores in /user/appdata/local/temp/upload.... file
                   // form.keepExtensions = true;
                   // form.parse(req, async (err, fields, files) => {
                   //   if (err) {
