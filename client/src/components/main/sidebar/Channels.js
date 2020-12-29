@@ -12,6 +12,8 @@ function Channels(props) {
 
   const [inviteuserid, setInviteuserid] = useState('');
   const [invitechannelid, setInvitechannelid] = useState('');
+  const [openinvitechannelid, setOpenInvitechannelid] = useState('')
+
 
   // const [privateaccess, setprivateaccess] = useState(false);
   // const [publicaccess, setpublicaccess] = useState(false);
@@ -186,6 +188,25 @@ function Channels(props) {
           channelid: invitechannelid,
           toid: inviteuserid,
           fromid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      window.location.reload();
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
+  function inviteOpenUserchannel() {
+    try {
+      const result = axios.post(
+        '/api/channels/inviteopenuserchannel',
+        {
+          cid: openinvitechannelid,
+          uid: localStorage.getItem('userId'),
         },
         {
           headers: { authorization: `bearer ${localStorage.authToken}` },
@@ -413,6 +434,25 @@ function Channels(props) {
                 e.preventDefault();
                 inviteUserchannel();
                 setInvitechannelid('');
+              }
+            }}
+          ></input>
+        </li>
+        <li>
+          <input
+            name="openinvitechannelid"
+            value={openinvitechannelid}
+            type="text"
+            placeholder="Open Invite(:channel_id)"
+            onChange={e => {
+              console.log(e.target.value);
+              setOpenInvitechannelid(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                e.preventDefault();
+                inviteOpenUserchannel();
+                setOpenInvitechannelid('');
               }
             }}
           ></input>

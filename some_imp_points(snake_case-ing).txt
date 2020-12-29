@@ -1,0 +1,206 @@
+// ./src/routes/comment.js
+
+// let photo = {};
+                  // if (req.body.photostring != 'undefined' && req.body.photostring != undefined) {
+                  //   let photoobj = JSON.parse(req.body.photostring);
+                  //   if (photoobj.path) {
+                  //     photo.data = fs.readFileSync(photoobj.path);
+                  //     photo.contentType = photoobj.contentType;
+                  //     photo.path = photoobj.path;
+                  //   }
+                  // }
+
+                  //VVIMppoints
+                  //can add file to fb in forwarding by creating instance of and uploading again using Firebase(fbase) put method as in posting file in frontend or in backend
+                  //we did forwarding(where multimedia links are not duplicated in firebase so deletion check is taken care --> not to delete multimedia of shared but to delete for original in client)
+                  //when original author deleted comment then the multimedia is deleted which can cause problem to forwarded users comments so we can duplicated multimedia(like we upload for creating comment in client same again getting media through url and uploading or duplicating the same)(already post is duplicated for forward comment) for forwarding comment or delete check removing(wheather that post is by original or not-->not forwarded) when original author deletes(so preserving multimedia even original user deletes comment in db but not reflecting the multimedia url deletion in storage) 
+                  //message details will be preserved even when original author deletes as entire snapshot of original message is kept in forwardedmsg/replyprivate/forward(every point in comment here is all 3 of these,etc) forwardmsg/replyp/forward.....details same goe if forwarder deletes still original has his/her message (this is advantageous then storing just message/comment_id(if that is deleted than we can't fetch details if original author deletes same if forward deletes then original author cant fetch if same message is linked to forwardmsg even if duplicated then no problem as new id is created for forward message) still it can be done but this is superset that that) 
+                  //forward_message==original_message(both with same ids),forward_message==clone_of(original_message)-->(forward_message containes details tag where entire original message is stored(*) instead of just id)   // all these combination will help in pros and cons of structure here (*) this is used
+                  //(firebase js web-->)getting file type object from firebase storage url js web//how to upload media using url in firebase storage js web
+                  //implemented gcp firebase routines in client as in backend(firebase functions can be, with service key gcloud lib can be done, firebase-admin can be done)
+                  //but we can only add JavaScript File and Blob APIs in put() method and getDownloadURL from retrieving end
+                  //or can download to local pc and upload with local address(but it is impractical in prod can be done easily though but no good practices)
+                  //So take the downloadUrl and add to file object path/data to convert to File blob later add the same to put() method for dulplication in fb storage same goes for multiple file but in loop
+                  //var f = new File([""], "filename.txt or <URL>", {type: "text/plain", lastModified: date})
+                  //create file object javascript from url react
+                  //how to create a file object with external url in js
+                  //convert url to file object javascript
+                  //const objectURL = URL.createObjectURL(object)
+                  //The URL.createObjectURL() static method creates a DOMString containing a URL representing the object given in the parameter. The URL lifetime is tied to the document in the window on which it was created. The new object URL represents the specified File object or Blob object.
+                  //fetch('https://upload.wikimedia.org/wikipedia/commons/7/77/Delete_key1.jpg')
+                  //   .then(res => res.blob()) // Gets the response and returns it as a blob
+                  //   .then(blob => {
+                  //     // Here's where you get access to the blob
+                  //     // And you can use it for whatever you want
+                  //     // Like calling ref().put(blob)
+
+                  //     // Here, I use it to make an image appear on the page
+                  //     let objectURL = URL.createObjectURL(blob);
+                  //     let myImage = new Image();
+                  //     myImage.src = objectURL;
+                  //     document.getElementById('myImg').appendChild(myImage)
+                  // });
+
+                  //Upload(Web based-->frontend)
+                  // Create a root reference
+                  // var storageRef = firebase.storage().ref();
+
+                  // // Create a reference to 'mountains.jpg'
+                  // var mountainsRef = storageRef.child('mountains.jpg');
+
+                  // // While the file names are the same, the references point to different files
+                  // mountainsRef.name === mountainImagesRef.name            // true
+                  // mountainsRef.fullPath === mountainImagesRef.fullPath    // false
+
+                  // var file = ... // use the Blob or File API
+                  // ref.put(file).then(function(snapshot) {
+                  //   console.log('Uploaded a blob or file!');
+                  // });
+
+                  // //can update metadata to
+                  // //https://firebase.google.com/docs/storage/web/upload-files
+
+                  // //Download(Web based-->frontend)
+                  // // Create a reference with an initial file path and name
+                  // var storage = firebase.storage();
+                  // var pathReference = storage.ref('images/stars.jpg');
+
+                  // // Create a reference from a Google Cloud Storage URI
+                  // var gsReference = storage.refFromURL('gs://bucket/images/stars.jpg')
+
+                  // // Create a reference from an HTTPS URL
+                  // // Note that in the URL, characters are URL escaped!
+                  // var httpsReference = storage.refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg');
+
+                  // storageRef.child('images/stars.jpg').getDownloadURL().then(function(url) {
+                  //   // `url` is the download URL for 'images/stars.jpg'
+
+                  //   // This can be downloaded directly:
+                  //   var xhr = new XMLHttpRequest();
+                  //   xhr.responseType = 'blob';
+                  //   xhr.onload = function(event) {
+                  //     var blob = xhr.response;
+                  //   };
+                  //   xhr.open('GET', url);
+                  //   xhr.send();
+
+                  //   // Or inserted into an <img> element:
+                  //   var img = document.getElementById('myimg');
+                  //   img.src = url;
+                  // }).catch(function(error) {
+                  //   // Handle any errors
+                  // });
+
+                  // // Create a reference to the file we want to download
+                  // var starsRef = storageRef.child('images/stars.jpg');
+
+                  // // Get the download URL
+                  // starsRef.getDownloadURL().then(function(url) {
+                  //   // Insert url into an <img> tag to "download"
+                  // }).catch(function(error) {
+
+                  //   // A full list of error codes is available at
+                  //   // https://firebase.google.com/docs/storage/web/handle-errors
+                  //   switch (error.code) {
+                  //     case 'storage/object-not-found':
+                  //       // File doesn't exist
+                  //       break;
+
+                  //     case 'storage/unauthorized':
+                  //       // User doesn't have permission to access the object
+                  //       break;
+
+                  //     case 'storage/canceled':
+                  //       // User canceled the upload
+                  //       break;
+
+                  //     ...
+
+                  //     case 'storage/unknown':
+                  //       // Unknown error occurred, inspect the server response
+                  //       break;
+                  //   }
+                  // });
+
+                  //You can also get or update metadata for files that are stored in Cloud Storage.
+                  //https://firebase.google.com/docs/storage/web/download-files
+
+
+                  // let form = new formidable.IncomingForm();//need to send in Formdata from client for this and multer(single or multiple file upload)-->multer stores in dest add and formidable default stores in /user/appdata/local/temp/upload.... file
+                  // form.keepExtensions = true;
+                  // form.parse(req, async (err, fields, files) => {
+                  //   if (err) {
+                  //     return res.status(400).json({
+                  //       error: 'Image could not be uploaded',
+                  //     });
+                  //   }
+
+                  //   // var oldPath = files.photo.path;
+                  //   // var newPath = path.join(__dirname, 'uploads')
+                  //   //         + '/'+files.photo.name
+                  //   // var rawData = fs.readFileSync(oldPath)
+
+                  //   // fs.writeFile(newPath, rawData, function(err){
+                  //   //     if(err) console.log(err)
+                  //   //     return res.send("Successfully uploaded")
+                  //   // })
+                  //   //console.log(files);
+                  // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+    var new_img = new Img;
+    new_img.img.data = fs.readFileSync(req.file.path)
+    new_img.img.contentType = 'image/jpeg';
+    new_img.save();
+
+    arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+};
+
+## frontend
+
+arrayBufferToBase64(buffer) {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+};
+
+componentDidMount() {
+    fetch('http://yourserver.com/api/img_data')
+    .then((res) => res.json())
+    .then((data) => {
+        // console.log(img)
+        var base64Flag = 'data:image/jpeg;base64,';
+        var imageStr = this.arrayBufferToBase64(data.img.data.data);
+        this.setState({
+            img: base64Flag + imageStr
+        )}
+    })
+}
+
+render() {
+    const {img} = this.state;
+    return (
+        <img
+            src={img}
+            alt='Helpful alt text'/>
+     )
+}
+export default Image;
+    */

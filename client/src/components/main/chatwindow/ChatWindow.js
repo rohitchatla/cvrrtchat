@@ -113,9 +113,11 @@ const ChatWindow = props => {
             ? props.currentChannel.user && props.currentChannel.user._id
             : props.currentChannel.channel.id}
           {props.currentChannel.channel.owner == localStorage.getItem('userId') ? (
+            // {/*check if the user is admin or not*/}
             <>
               <button onClick={() => setIsEdit(!isEdit)}>Add User</button>
-              {isEdit ? (
+
+              {isEdit ? ( //{/*check if the user is admin or not*/}
                 <input
                   type="text"
                   onChange={e => {
