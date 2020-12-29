@@ -112,6 +112,16 @@ const ChatWindow = props => {
           {props.currentChannel.private
             ? props.currentChannel.user && props.currentChannel.user._id
             : props.currentChannel.channel.id}
+          {/* {
+            //gives current channel all info in json(string) in alert form
+            <button
+              onClick={() => {
+                {props.currentChannel.private ? alert(JSON.stringify(props.currentChannel.user)): alert(JSON.stringify(props.currentChannel.channel))}
+              }}
+            >
+              {props.currentChannel.private ? "User info" : "Channel_info"}
+            </button>
+          } */}
           {props.currentChannel.channel.owner == localStorage.getItem('userId') ? (
             // {/*check if the user is admin or not*/}
             <>
