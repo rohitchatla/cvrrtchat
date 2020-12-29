@@ -113,7 +113,7 @@ const ChatWindow = props => {
             ? props.currentChannel.user && props.currentChannel.user._id
             : props.currentChannel.channel.id}
           {/* {
-            //gives current channel all info in json(string) in alert form
+            //gives current channel all info in json(string) in alert form with members info,etc
             <button
               onClick={() => {
                 {props.currentChannel.private ? alert(JSON.stringify(props.currentChannel.user)): alert(JSON.stringify(props.currentChannel.channel))}
