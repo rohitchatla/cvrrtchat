@@ -12,8 +12,7 @@ function Channels(props) {
 
   const [inviteuserid, setInviteuserid] = useState('');
   const [invitechannelid, setInvitechannelid] = useState('');
-  const [openinvitechannelid, setOpenInvitechannelid] = useState('')
-
+  const [openinvitechannelid, setOpenInvitechannelid] = useState('');
 
   // const [privateaccess, setprivateaccess] = useState(false);
   // const [publicaccess, setpublicaccess] = useState(false);
@@ -144,6 +143,10 @@ function Channels(props) {
     } catch (error) {
       console.log('allnotifs error: ', error);
     }
+
+    // if (this.props.match.params) {
+    //   inviteUserchannel(); //or can in App.js routes
+    // }
   }, []);
 
   function accessCheck(users) {
@@ -213,6 +216,22 @@ function Channels(props) {
         },
       );
       console.log(result.data);
+      window.location.reload();
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
+  function inviteUrl() {
+    try {
+      const result = axios.get(
+        `/api/channels/inviteurl/${openinvitechannelid}/${localStorage.getItem('userId')}`,
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      console.log(result.data);
+      alert(result.data.msg); //can handle validations and error checks,etc
       window.location.reload();
     } catch (error) {
       console.log('invite error: ', error);

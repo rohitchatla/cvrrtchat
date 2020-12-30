@@ -163,7 +163,8 @@ const channelRouter = io => {
     });
   });
 
-  router.post('/autoadduserinvite', async (req, res) => {//also for invite based on channelid for open channels without sending any notification to admin(for adding user by admin) just add user
+  router.post('/autoadduserinvite', async (req, res) => {
+    //also for invite based on channelid for open channels without sending any notification to admin(for adding user by admin) just add user
     //or can be based on url with channel so that user can be added to that channel
     const { cid, uid } = req.body;
 
@@ -191,7 +192,8 @@ const channelRouter = io => {
     });
   });
 
-  router.post('/inviteopenuserchannel', async (req, res) => {//also for invite based on channelid for open channels without sending any notification to admin(for adding user by admin) just add user
+  router.post('/inviteopenuserchannel', async (req, res) => {
+    //also for invite based on channelid for open channels without sending any notification to admin(for adding user by admin) just add user
     //or can be based on url with channel so that user can be added to that channel
     const { cid, uid } = req.body;
 
@@ -207,7 +209,8 @@ const channelRouter = io => {
           res.json({ msg: 'User already there in the channel' });
         }
       } else {
-        if(channel.public){//only if the channel is public or accessed or not private(!channel.private)
+        if (channel.public) {
+          //only if the channel is public or accessed or not private(!channel.private)
           channel.users.push(uid);
           channel.save();
           User.findById(uid).then(user => {
@@ -217,12 +220,45 @@ const channelRouter = io => {
             res.json({ msg: 'Added User to the channel & channel to User' });
           });
         }
-        
       }
     });
   });
 
-  router.post('/inviteuserchannel', async (req, res) => {//for users
+  /*nlp_tagging->can also add like "add short for rs.10" then to add shirt in some channel,board,etc and money scrapping from it using nlp and identifying the type of the commant and NER of NLP too,etc */
+  router.get('/inviteurl/:cid/:uid', async (req, res) => {
+    //http://localhost:8000/api/channels/inviteurl/1/2
+    //invite url based
+    const { cid, uid } = req.params;
+    console.log(cid, uid);
+    Channel.findById(cid).then(channel => {
+      const func = userid => userid == uid;
+      const funcown = userid => userid == channel.owner;
+      const bol = channel.users.some(func);
+      const bolown = channel.users.some(funcown);
+      if (bol) {
+        if (bolown) {
+          res.json({ msg: 'Owner cant him/her-self :D)' });
+        } else {
+          res.json({ msg: 'User already there in the channel' });
+        }
+      } else {
+        if (channel.public) {
+          //only if the channel is public or accessed or not private(!channel.private)
+          channel.users.push(uid);
+          channel.save();
+          User.findById(uid).then(user => {
+            user.channels.push(cid);
+            user.save();
+            console.log('saved');
+            res.json({ msg: 'Added User to the channel & channel to User' });
+          });
+        }
+      }
+    });
+  });
+
+  router.post('/inviteuserchannel', async (req, res) => {
+    //for users
     const { channelid, fromid, toid } = req.body;
     Channel.findById(channelid).then(ch => {
       User.findById(fromid)
@@ -244,7 +280,8 @@ const channelRouter = io => {
     });
   });
 
-  router.post('/invite', async (req, res) => {//for channels
+  router.post('/invite', async (req, res) => {
+    //for channels
     //can handle it directly to add user to channel based on private(notif to admin as we are doing here treating all channels to be private, but still can be tweaked by adding private/public bool in channelSchema.) and public channel(add directly)
     const { channelid, uid } = req.body;
     Channel.findById(channelid)
