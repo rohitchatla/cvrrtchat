@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import axios from 'axios';
 import { ReactComponent as Logo } from './assets/cvrr_logo.svg';
 import AppContainer from './components/main/AppContainer';
+import Invite from './components/main/invite';
 export const MessageContext = React.createContext();
 
 const GlobalStyles = createGlobalStyle`
@@ -136,6 +138,10 @@ function App() {
         </AppWrap>
       ) : (
         <AppContainer />
+
+        // <Switch>
+        //   <Route path="/inviteurlwoauth/:cid" component={Invite} />{/* /inviteurlwouth/:cid/:uid */} //with oauth
+        // </Switch>
       )}
     </MessageContext.Provider>
   );

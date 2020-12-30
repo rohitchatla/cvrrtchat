@@ -144,9 +144,15 @@ function Channels(props) {
       console.log('allnotifs error: ', error);
     }
 
-    // if (this.props.match.params) {
-    //   inviteUserchannel(); //or can in App.js routes
-    // }
+    let url = window.location.href;
+    let cid = url.substring(url.lastIndexOf('/') + 1);
+    let urlwocid = url.substring(0, url.lastIndexOf('/'));
+    let invite = urlwocid.substring(urlwocid.lastIndexOf('/') + 1, url.lastIndexOf('/'));
+    //console.log(url, cid, urlwocid, invite);
+    if (invite == 'inviteurlwooauth') {
+      //this.props.match.params
+      inviteUrl(cid); //or can in App.js routes
+    }
   }, []);
 
   function accessCheck(users) {
@@ -222,14 +228,13 @@ function Channels(props) {
     }
   }
 
-  function inviteUrl() {
+  function inviteUrl(cid) {
+    //with oauth
     try {
-      const result = axios.get(
-        `/api/channels/inviteurl/${openinvitechannelid}/${localStorage.getItem('userId')}`,
-        {
-          headers: { authorization: `bearer ${localStorage.authToken}` },
-        },
-      );
+      const result = axios.get(`/api/channels/inviteurl/${cid}/${localStorage.getItem('userId')}`, {
+        //${openinvitechannelid}-->cid
+        headers: { authorization: `bearer ${localStorage.authToken}` },
+      });
       console.log(result.data);
       alert(result.data.msg); //can handle validations and error checks,etc
       window.location.reload();

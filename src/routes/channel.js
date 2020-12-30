@@ -226,7 +226,7 @@ const channelRouter = io => {
 
   /*nlp_tagging->can also add like "add short for rs.10" then to add shirt in some channel,board,etc and money scrapping from it using nlp and identifying the type of the commant and NER of NLP too,etc */
   router.get('/inviteurl/:cid/:uid', async (req, res) => {
-    //http://localhost:8000/api/channels/inviteurl/1/2
+    //with oauth
     //invite url based
     const { cid, uid } = req.params;
     console.log(cid, uid);

@@ -1,7 +1,9 @@
 import React, { useReducer, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Sidebar from './sidebar/Sidebar';
 import ChatWindow from './chatwindow/ChatWindow';
+import Invite from './invite';
 export const AppContext = React.createContext(null);
 
 //establish socket connection on client side
@@ -190,6 +192,10 @@ function AppContainer() {
       <Container>
         <Sidebar currentChannel={appState} />
         <ChatWindow currentChannel={appState} />
+        {/* <Switch>
+          <Route path="/inviteurlwoauth/:cid" component={Invite} />
+           /inviteurlwouth/:cid/:uid  //with oauth
+        </Switch> */}
       </Container>
     </AppContext.Provider>
   );

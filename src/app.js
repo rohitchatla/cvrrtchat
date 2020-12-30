@@ -6,6 +6,9 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const passport = require('passport');
 const path = require('path');
+const Channel = require('./models/Channel');
+const User = require('./models/User');
+const Notif = require('./models/notif');
 
 const app = express();
 
@@ -18,7 +21,7 @@ const io = require('socket.io')(server);
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 const userRouter = require('./routes/users')(io);
 const channelRouter = require('./routes/channel')(io);
-
+const inviteRouter = require('./routes/invite');
 //pass mounted Socket.io server to comments router
 const commentRouter = require('./routes/comments')(io);
 
@@ -55,6 +58,39 @@ app.use('/api/comments', jwtAuth, commentRouter);
 
 // Channel route
 app.use('/api/channels', jwtAuth, channelRouter);
+
+app.use('/api/invite', inviteRouter);
+
+// app.get('/api/channels/inviteurlwooauth/:cid/:uid', (req, res) => {//without oauth
+//http://localhost:8000/api/channels/inviteurl/1/2
+//   const { cid, uid } = req.params;
+//   console.log(cid, uid);
+//   Channel.findById(cid).then(channel => {
+//     const func = userid => userid == uid;
+//     const funcown = userid => userid == channel.owner;
+//     const bol = channel.users.some(func);
+//     const bolown = channel.users.some(funcown);
+//     if (bol) {
+//       if (bolown) {
+//         res.json({ msg: 'Owner cant him/her-self :D)' });
+//       } else {
+//         res.json({ msg: 'User already there in the channel' });
+//       }
+//     } else {
+//       if (channel.public) {
+//         //only if the channel is public or accessed or not private(!channel.private)
+//         channel.users.push(uid);
+//         channel.save();
+//         User.findById(uid).then(user => {
+//           user.channels.push(cid);
+//           user.save();
+//           console.log('saved');
+//           res.json({ msg: 'Added User to the channel & channel to User' });
+//         });
+//       }
+//     }
+//   });
+// });
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
