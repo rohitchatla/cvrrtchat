@@ -1,1 +1,6 @@
 "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client", --> removed, as it was causing problem when building in heroku push but not must need to build client before pushing to heroku, later added as the problem was with grpc(so added firebase new version("firebase": "^8.1.2") in client)
+
+//see models structure(MongoDB/atlas,./server/models,etc)/ER of DB,boards,channels,users,messages(of channels,users),etc to get idea of flow,etc[added on 01/01/21 for prev long date].(and& see how diff implemented in client and server,etc for boards,channels,users,messages(of channels,users) in cvrrtodo/cvrrtchat/chatrooms , etc)
+[30/12/20]#//#(urlinvites,etc,misc all kinds added).
+[01/01/21]//can add deleteall,etc with cloning/duplicating channel/users messages,with bools(delete/view->turn on/off).
+[13/01/21]//screen blank issue fixes in Sidebar.js

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Sidebar from './sidebar/Sidebar';
 import ChatWindow from './chatwindow/ChatWindow';
 import Invite from './invite';
+import channel from './sidebar/channel';
+import user from './sidebar/user';
 export const AppContext = React.createContext(null);
 
 //establish socket connection on client side
@@ -195,6 +197,11 @@ function AppContainer() {
         {/* <Switch>
           <Route path="/inviteurlwoauth/:cid" component={Invite} />
            /inviteurlwouth/:cid/:uid  //with oauth
+-----------------------------------------------------------------------------
+           <Route path="/c/:cid" component={Channel} />
+           appState //can also be implemented as cvrr_todo with GET urls(done here with comments),etc this one is with component data transfers,etc for channels,user and their in boards
+          <Route path="/u/:uid" component={User} />
+           appState
         </Switch> */}
       </Container>
     </AppContext.Provider>

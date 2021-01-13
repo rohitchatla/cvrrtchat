@@ -7,6 +7,8 @@ import axios from 'axios';
 import { ReactComponent as Logo } from './assets/cvrr_logo.svg';
 import AppContainer from './components/main/AppContainer';
 import Invite from './components/main/invite';
+import channel from './components/main/sidebar/channel';
+import user from './components/main/sidebar/user';
 export const MessageContext = React.createContext();
 
 const GlobalStyles = createGlobalStyle`

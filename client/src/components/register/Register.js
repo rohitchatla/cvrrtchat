@@ -36,7 +36,7 @@ function Register(props) {
 
   function signUp() {
     auth
-      .signInWithPopup(provider)
+      .signInWithPopup(provider)//as auth.signUpWithPopup not there
       .then(result => {
         console.log(result); //result.user.id (/displayName/email/photoURL)
         let name = result.user.displayName;

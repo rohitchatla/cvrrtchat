@@ -109,7 +109,7 @@ function Channels(props) {
   }
 
   useEffect(async () => {
-    //async()
+    //async()//for useEffects blank screen prob
     try {
       const result = await axios.post(
         //await
@@ -153,6 +153,13 @@ function Channels(props) {
       //this.props.match.params
       inviteUrl(cid); //or can in App.js routes
     }
+
+    // if (url == '/c/<cid>') {
+    //   //for GET(in client ) /c/<cid>
+    //   localStorage.setItem('chatprivate', false);
+    //   setCurrentChannelID(channel.id);
+    //   setchatprivate(false);
+    // }
   }, []);
 
   function accessCheck(users) {

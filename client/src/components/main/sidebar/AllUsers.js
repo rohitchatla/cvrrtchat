@@ -18,6 +18,18 @@ function AllUsers(props) {
     } catch (error) {}
   };
 
+  // useEffect(async () => {
+  //   //async()
+  //   if (url == '/u/<uid>') {
+  //   //for GET(in client ) /u/<uid>
+  //     setCurrentUserID(user.id);
+  //     setchatprivate(true);
+  //     getUsermessages();
+  //     //window.location.reload();
+  //     localStorage.setItem('chatprivate', true);
+  //   }
+  // }, []);
+
   return (
     <>
       <h3>Users</h3>

@@ -85,11 +85,21 @@ return response containing array of all comments in JSON on success
       });
   });
 
+  /*# function actionsandmentions(<>){(all mostly for cvrrvidrooms,cvrrvidnotes,etc)
+    checking for example board name,id(or fetching),uid(or fetching from integrated db where all details of the user like cvrrtodo auth details,other webapp/app details is present)
+	Using NLP for intelligent decisions(as typing strict rule as shown in example can be done using if..else will solve the problem but it should do works/actions like chatbot, vague sentence also should be interpreted correctly),mostly can be done by strict rules(for some hardcoded ruled actions/works),etc
+		if(<> contains add){//with regexp,etc(manual checking(hardcoded rules),etc)
+			grab boardname,etc
+			call restapi of cvrrtodo,etc(reverse for cvrrtodo(from cvrrtodo to cvrrtchat or cvrrchatrooms,etc)) for.eg adding board(reverse: in cvrrtodo for adding comment from board content to channel in chatapps), DL/ML/NLP,etc for processing text,etc
+		}....
+   }
+  */
+
   /*
 Route Post requests 
 Validate request body
 Verify userID exists in db
-Create new comment document from request body
+Create new comment document from request body 
 Return response containing new comment in JSON
 */
 
@@ -159,6 +169,23 @@ Return response containing new comment in JSON
                   if (!channel) {
                     return res.status(404).json({ Error: 'Channel not found' });
                   }
+
+	          		/*#
+	  					#NLP tagging,mentions,etc ex:msg: "@ or % add {<shirt_name,etc>} to {<board_name>}" "%rohit look at this chat channel" we will firstly only take login/auth details of cvrrtodo so that we can find boardname,id with that uid,etc same goes with all other webapp/app integrations(like here:cvrrtodo) or for cvrrtodo ex: "@ transfer this <board> from here to there,etc","%rohit look at this" ,(all mostly for cvrrvidrooms,cvrrvidnotes,etc) etc
+	  					if(req.body.text  contains("@") at first){//indicate it is the message of "actions" or mentions,etc(with diff symbols) accrodinly we will deal with check rules,NLP,etc
+	  						actionsandmentions(<>)
+	  						or
+	  						if(req.body.text contains add){
+	  							grab boardname,etc
+	  						}....
+	  					}
+	  					if(req.body.text  contains("%") at first){//indicate it is the message of actions or "mentions",etc(with diff symbols) accrodinly we will deal with check rules,NLP,etc
+	  						actionsandmentions(<>)
+	  						if(req.body.text contains <user name to be mentioned: predisplayed in frontend or they type(name,or id of mentioned person)>){
+	  							mention notif to that mentioned person, or store in db and show in that persons frontend as notif thing,etc
+	  						}....
+	  					}
+	          		*/
 
                   // let photo = {};
                   // if (req.body.photostring != 'undefined' && req.body.photostring != undefined) {

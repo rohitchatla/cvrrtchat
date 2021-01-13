@@ -42,21 +42,41 @@ function Sidebar(props) {
       }
     };
 
-    getChannels().then(channels => {
-      const generalChannel = channels[0];
-      //console.log(localStorage.getItem('chatprivate'));
-      if (currentChannelID) {
-        const [currentChannel] = channels.filter(channel => {
-          return channel.id === currentChannelID;
-        });
+    getChannels()
+      .then(channels => {
+        //if (channels.length > 1) {//for useEffects blank screen prob
+        const generalChannel = channels[0]; //0 index of undefined
 
-        appDispatch({ type: 'SET_CHANNEL', channel: currentChannel });
-      } else {
-        appDispatch({ type: 'SET_CHANNEL', channel: generalChannel });
-        setCurrentChannelID(generalChannel.id);
-        socket.emit('joinChannel', generalChannel.id);
-      }
-    });
+        // let generalChannel;
+        // if (channels.length > 1) {//.length() of undefined
+        //   generalChannel = channels[0];
+        // }
+
+        // try {
+        //   const generalChannel = channels[0];
+        // } catch (error) {
+        //   console.log(error);
+        // }
+
+        //}
+
+        //console.log(localStorage.getItem('chatprivate'));
+        if (currentChannelID) {
+          const [currentChannel] = channels.filter(channel => {
+            return channel.id === currentChannelID;
+          });
+
+          appDispatch({ type: 'SET_CHANNEL', channel: currentChannel });
+        } else {
+          appDispatch({ type: 'SET_CHANNEL', channel: generalChannel });
+          setCurrentChannelID(generalChannel.id);
+          socket.emit('joinChannel', generalChannel.id);
+        }
+      })
+      .catch(err => {
+        //for useEffects blank screen prob
+        console.log(err);
+      });
   }, [appDispatch, errorMessage, currentChannelID, socket]);
 
   useEffect(() => {
@@ -78,21 +98,40 @@ function Sidebar(props) {
       }
     };
 
-    getUsers().then(users => {
-      const generalUser = users[0];
-      //console.log(localStorage.getItem('chatprivate'));
-      if (currentUserID) {
-        const [currentUser] = users.filter(us => {
-          return us._id === currentUserID;
-        });
+    getUsers()
+      .then(users => {
+        //if (users.length > 1) {//for useEffects blank screen prob
+        const generalUser = users[0]; //0 index of undefined
+        //}
 
-        appDispatch({ type: 'SET_USER', user: currentUser });
-      } else {
-        appDispatch({ type: 'SET_USER', user: generalUser });
-        setCurrentUserID(generalUser.id);
-        //socket.emit('joinUser', generalUser.id);
-      }
-    });
+        // let generalUser;
+        // if (users.length > 1) {//.length() of undefined
+        //   generalUser = users[0];
+        // }
+
+        // try {
+        //   const generalUser = users[0];
+        // } catch (error) {
+        //   console.log(error);
+        // }
+
+        //console.log(localStorage.getItem('chatprivate'));
+        if (currentUserID) {
+          const [currentUser] = users.filter(us => {
+            return us._id === currentUserID;
+          });
+
+          appDispatch({ type: 'SET_USER', user: currentUser });
+        } else {
+          appDispatch({ type: 'SET_USER', user: generalUser });
+          setCurrentUserID(generalUser.id);
+          //socket.emit('joinUser', generalUser.id);
+        }
+      })
+      .catch(err => {
+        //for useEffects blank screen prob
+        console.log(err);
+      });
   }, [appDispatch, errorMessage, currentUserID, chatprivate, socket]);
 
   // const getUsermessages = async () => {
