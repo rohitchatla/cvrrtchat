@@ -39,6 +39,12 @@ const ChannelSchema = new mongoose.Schema({
     default: 'all',
   },
   //invitingchannels(bol)-->autoadd once clicked in invite(channel type: public(true) && misctype: notall )
+  teams: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'teams',
+    },
+  ],
 });
 
 module.exports = Channel = mongoose.model('channel', ChannelSchema);
