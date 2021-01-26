@@ -41,7 +41,7 @@ const ChannelSchema = new mongoose.Schema({
   //invitingchannels(bol)-->autoadd once clicked in invite(channel type: public(true) && misctype: notall )
   teams: [
     {
-      type: mongoose.Schema.Types.ObjectId, //Schema.Types.ObjectId(error)
+      type: mongoose.Schema.Types.ObjectId, //Schema.Types.ObjectId(error)-->const Schema = mongoose.Schema;-->//mongoose.Schema.Types.ObjectId(fullpath one)
       ref: 'teams',
     },
   ],
