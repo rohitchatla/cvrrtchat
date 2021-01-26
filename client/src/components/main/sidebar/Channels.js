@@ -196,7 +196,7 @@ function Channels(props) {
     //   //console.log(result.data);
     //   setTeams(result.data);
     // } catch (error) {
-    //   console.log('invite error: ', error);
+    //   console.log('error: ', error);
     // }
 
     // try {
@@ -208,7 +208,7 @@ function Channels(props) {
     //   //console.log(result.data);
     //   setTeams(result.data);
     // } catch (error) {
-    //   console.log('invite error: ', error);
+    //   console.log('error: ', error);
     // }
   }, []);
 
@@ -363,7 +363,7 @@ function Channels(props) {
       );
       //console.log(result.data);
     } catch (error) {
-      console.log('invite error: ', error);
+      console.log('error: ', error);
     }
   }
   function addPMember2Team(tid) {
@@ -384,7 +384,7 @@ function Channels(props) {
       );
       //console.log(result.data);
     } catch (error) {
-      console.log('invite error: ', error);
+      console.log('error: ', error);
     }
   }
 
