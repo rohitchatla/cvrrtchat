@@ -349,7 +349,7 @@ Return response containing new comment in JSON
 
                   etcfile = {};
                   etcfile.data = '';
-                  etcfile.contentType = req.body.filetype.filetypee; //'application/zip/etc';
+                  etcfile.contentType = req.body.filetype.filetypee; //'application/zip/gif's/pdf/etc';
                   etcfile.path = req.body.etcfile;
 
                   let replybool = false;

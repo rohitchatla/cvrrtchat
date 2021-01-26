@@ -17,6 +17,8 @@ function Channels(props) {
   // const [privateaccess, setprivateaccess] = useState(false);
   // const [publicaccess, setpublicaccess] = useState(false);
 
+  const [teams, setTeams] = useState('');
+
   async function createNewChannel() {
     const name = prompt('Channel name?');
     const description = prompt('Channel description?');
@@ -160,6 +162,54 @@ function Channels(props) {
     //   setCurrentChannelID(channel.id);
     //   setchatprivate(false);
     // }
+
+    try {
+      //await
+      const result = await axios.get(`/api/teams/${localStorage.getItem('userId')}`, {
+        //${teamid} can be added,//tid-->team._id
+        headers: { authorization: `bearer ${localStorage.authToken}` },
+      });
+      console.log(result.data);
+      setTeams(result.data);
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+
+    // try {
+    //   //await
+    //   const result = await axios.get(`/api/teams/getchannels/${localStorage.getItem('userId')}`, {
+    //     //${teamid} can be added,//tid-->team._id
+    //     headers: { authorization: `bearer ${localStorage.authToken}` },
+    //   });
+    //   //console.log(result.data);
+    //   setTeams(result.data);
+    // } catch (error) {
+    //   console.log('invite error: ', error);
+    // }
+
+    // try {
+    //   //await
+    //   const result = await axios.get(`/api/teams/getmembers/${localStorage.getItem('userId')}`, {
+    //     //${teamid} can be added,//tid-->team._id
+    //     headers: { authorization: `bearer ${localStorage.authToken}` },
+    //   });
+    //   //console.log(result.data);
+    //   setTeams(result.data);
+    // } catch (error) {
+    //   console.log('invite error: ', error);
+    // }
+
+    // try {
+    //   //await
+    //   const result = await axios.get(`/api/teams/getpmembers/${localStorage.getItem('userId')}`, {
+    //     //${teamid} can be added,//tid-->team._id
+    //     headers: { authorization: `bearer ${localStorage.authToken}` },
+    //   });
+    //   //console.log(result.data);
+    //   setTeams(result.data);
+    // } catch (error) {
+    //   console.log('invite error: ', error);
+    // }
   }, []);
 
   function accessCheck(users) {
@@ -245,6 +295,94 @@ function Channels(props) {
       console.log(result.data);
       alert(result.data.msg); //can handle validations and error checks,etc
       window.location.reload();
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
+  function addTeam() {
+    let title = prompt('Title');
+    let publictype = prompt('Public(y/n)');
+    let description = prompt('Description');
+    try {
+      const result = axios.post(
+        `/api/teams/`,
+        {
+          title,
+          public: publictype,
+          description,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      //console.log(result.data);
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+
+  // function getTeams() {} //in useEffects(compoundDidMound/Refresh activity lifecycle)
+  function addChannel2Team(tid) {
+    //tid-->team._id
+
+    let cid = prompt('Channel Id'); //can add input_tag(html) for channel_id input
+    try {
+      const result = axios.post(
+        `/api/teams/addchannel`,
+        {
+          cid,
+          tid,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      //console.log(result.data);
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+  function addMember2Team(tid) {
+    //tid-->team._id
+
+    let mid = prompt('Member Id'); //can add input_tag(html) for member_id input
+    try {
+      const result = axios.post(
+        `/api/teams/addmember`,
+        {
+          mid,
+          tid,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      //console.log(result.data);
+    } catch (error) {
+      console.log('invite error: ', error);
+    }
+  }
+  function addPMember2Team(tid) {
+    //tid-->team._id
+
+    let pmid = prompt('Private Member Id'); //can add input_tag(html) for private_member_id input
+    try {
+      const result = axios.post(
+        `/api/teams/addpmember`,
+        {
+          pmid,
+          tid,
+          uid: localStorage.getItem('userId'),
+        },
+        {
+          headers: { authorization: `bearer ${localStorage.authToken}` },
+        },
+      );
+      //console.log(result.data);
     } catch (error) {
       console.log('invite error: ', error);
     }
@@ -488,6 +626,66 @@ function Channels(props) {
             }}
           ></input>
         </li>
+
+        {/*Teams(can be kept here(below)/above/elsewhere here in-out of <ul>(html),header,etc of Notifications/notifs(S-R)) */}
+        <Header>
+          <h3>Teams</h3>
+          <ul className="channels">
+            {/* <li>Teams</li> */}
+            {/* Button onClick={}-->Parsing error: JSX attributes must only be assigned a non-empty expression */}
+            <button onClick={() => addTeam()}>Add teams</button>
+            {/*this.addTeam()*/}
+            {teams.length > 0 &&
+              teams.map(team => {
+                return (
+                  <div>
+                    {/* <div .. /> */}
+                    <ChannelInSideBar
+                      key={team._id}
+                      id={team._id}
+                      onClick={() => {
+                        alert(JSON.stringify(team));
+                      }}
+                    >
+                      {team.title}-
+                    </ChannelInSideBar>
+                    {/* <ChannelInSideBar .. /> */}
+                    <h5>Channels</h5>
+                    {team.channels.length > 0 &&
+                      team.channels.map(tch => {
+                        //add return () else :: Expected an assignment or function call and instead saw an expression
+                        return <button>{tch.name}</button>;
+                      })}
+                    <h5>Members</h5>
+                    {team.members.length > 0 &&
+                      team.members.map(tme => {
+                        //add return () else :: Expected an assignment or function call and instead saw an expression
+                        return <button>{tme.name}</button>;
+                      })}
+                    <h5>Private-Members</h5>
+                    {/* <h7></h7> */}
+                    {team.privateMembers.length > 0 &&
+                      team.privateMembers.map(tpme => {
+                        //add return () else :: Expected an assignment or function call and instead saw an expression
+                        return <button>{tpme.name}</button>;
+                      })}
+
+                    {team.ownerId == localStorage.getItem('userId') ? (
+                      <div>
+                        <button onClick={() => addChannel2Team(team._id)}>Add channels</button>
+                        <button onClick={() => addMember2Team(team._id)}>Add Members</button>
+                        <button onClick={() => addPMember2Team(team._id)}>
+                          Add Private-Members
+                        </button>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                );
+              })}
+          </ul>
+        </Header>
       </ul>
     </>
   );
@@ -526,6 +724,7 @@ const ChannelInSideBar = styled.li`
     props.id === props.currentChannel ? 'rgb(52, 70, 255, .5)' : 'none'};
   width: 100%;
   cursor: pointer;
+  height: 10%;
 `;
 
 export default Channels;

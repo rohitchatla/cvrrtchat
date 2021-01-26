@@ -68,6 +68,7 @@ const channelRouter = io => {
    * @desc Get all channels
    */
   router.get('/', async (req, res) => {
+    //console.log('channels called');
     try {
       let allChannels = await Channel.find().populate([
         'users',

@@ -10,7 +10,7 @@ const router = express.Router();
 const createAuthToken = user => {
   return jwt.sign({ user }, config.JWT_SECRET, {
     subject: user.name,
-    expiresIn: config.JWT_EXPIRY,
+    //expiresIn: config.JWT_EXPIRY, //jwt expiry:1d was main causing prob of blank useEffects screen in Sidebar.js([GET] /channels) --> Unauthorized
     algorithm: 'HS256',
   });
 };

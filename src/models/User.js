@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
   channels: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Channel',
+      ref: 'channel', //previously Channel was worng ("C" --> is capital wrong, "c" --> is correct as schemas was named like that in /models/Channel.js(mongoose.model('channel', ChannelSchema);))
     },
   ],
 });

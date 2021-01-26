@@ -1,6 +1,31 @@
+//2020
+
 "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client", --> removed, as it was causing problem when building in heroku push but not must need to build client before pushing to heroku, later added as the problem was with grpc(so added firebase new version("firebase": "^8.1.2") in client)
 
 //see models structure(MongoDB/atlas,./server/models,etc)/ER of DB,boards,channels,users,messages(of channels,users),etc to get idea of flow,etc[added on 01/01/21 for prev long date].(and& see how diff implemented in client and server,etc for boards,channels,users,messages(of channels,users) in cvrrtodo/cvrrtchat/chatrooms , etc)
-[30/12/20]#//#(urlinvites,etc,misc all kinds added).
+[30/12/20]#//#(urlinvites,etc,misc all kinds, etc added).
 [01/01/21]//can add deleteall,etc with cloning/duplicating channel/users messages,with bools(delete/view->turn on/off).
 [13/01/21]//screen blank issue fixes in Sidebar.js
+#[.....-10-15/01/2021.....{bogi,pongal-sankranthi,kanuma(.....3 days festival.....)}.....] --> /* comment // */ added in comments.js/ 
+.....//'application/zip/';-->//"gif/pdf/etc"-->//"gif's/pdf/etc"-->//'application/zip/gif's/pdf/etc';.
+
+[17-01-21] --> can integrate(as restapi,pluggin,sdk,api etc) with other cvrr apps(already done with cvrrvidrooms/cvrrvidnotes, nlp tagging(here also), etc), etc.can integrate as chatbot,chatengine(nlp tagging,etc) to others(as and(&) in){[18-01-21] --> all these(cvrrdndtodo2,cvrrtchat,cvrrchatrooms, etc) integration possible together or with other cvrrapps(same goes with other cvrrapps with these or else vice-versa all comb., etc), etc. for more details in cvrrtchat,cvrrchatrooms,cvrrdndtodo2, etc check{(someelse file, code comments)}, etc(for all)}, with diff combination and(&) all(order assistance,order tracking, etc),with all others alter. comb.'s, etc also
+
+
+[18-01-21] --> can add private chats/todos/clips/boards/channels/texts/columns/snippets/lists/cards only/mentions/etc in channels/groups/user/boards to particular user in channel/groups/users/boards, etc
+
+[19-01-21] --> can be added/done money transfers(superchat like with (datascience intelligence(ai,ml,dl, etc)/(nlp tagging)/, etc)) and(&), etc
+
+[19-01-21] --> can be added/done (nlp tagging)/(datascience intelligence(ai,ml,dl, etc)/, etc) for urls(sentiment, recommendations, etc) in boards(lists,cards, etc)/chats/messages/, etc(channels,users, etc), live streamming vids chats, etc
+
+/*.[18-01-21]. ::-->::/-->/>>/#/>/, etc
+  legends:: can be add/added/done/*/, etc - feature/future addon's/update, etc.
+
+..etc other legends can be added too, etc.
+
+all other diff alter. comb. can be added as feature/future addon's/update/ ,etc(and(&) all){(added this/here/ or here/this (vice-versa thing as per first come first serve basis, etc), etc on [19-01-21])}.
+
+[19-01-21] --> For more details/info./.*.,(or)//, etc see someelse file, code comments, etc(for all).
+
+[19-01-21](*) --> all cvrrapps can be integrated together/with this/this can be with others/all comb., etc(and(&) all).
+*/

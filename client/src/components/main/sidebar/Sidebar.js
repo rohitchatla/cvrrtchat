@@ -36,16 +36,23 @@ function Sidebar(props) {
         setIsLoading(false);
         return result.data;
       } catch (error) {
+        console.log(error);
+        console.log(localStorage.authToken);
         setIsLoading(false);
         errorMessage.set_message([{ msg: 'Unable to get channels.' }]);
         setIsError(true);
       }
     };
 
+    // getChannels().then(c => {
+    //   //console.log(c);
+    // });
+
     getChannels()
       .then(channels => {
+        //jwt expiry:1d was main causing prob of blank useEffects screen in Sidebar.js([GET] /channels) --> Unauthorized
         //if (channels.length > 1) {//for useEffects blank screen prob
-        const generalChannel = channels[0]; //0 index of undefined
+        const generalChannel = channels[0] || ''; //0 index of undefined
 
         // let generalChannel;
         // if (channels.length > 1) {//.length() of undefined
@@ -100,8 +107,9 @@ function Sidebar(props) {
 
     getUsers()
       .then(users => {
+        //jwt expiry:1d was main causing prob of blank useEffects screen in Sidebar.js([GET] /channels) --> Unauthorized
         //if (users.length > 1) {//for useEffects blank screen prob
-        const generalUser = users[0]; //0 index of undefined
+        const generalUser = users[0] || ''; //0 index of undefined
         //}
 
         // let generalUser;
