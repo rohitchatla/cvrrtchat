@@ -62,7 +62,7 @@ app.use('/api/channels', jwtAuth, channelRouter);
 
 //Teams route
 app.use('/api/teams', jwtAuth, teamsRouter);
-
+//Invite route
 app.use('/api/invite', inviteRouter);
 
 // app.get('/api/channels/inviteurlwooauth/:cid/:uid', (req, res) => {//without oauth

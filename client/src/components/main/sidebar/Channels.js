@@ -688,6 +688,7 @@ function Channels(props) {
         </Header>
       </ul>
     </>
+  //{/*<div .. / >*/}
   );
 }
 

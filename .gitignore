@@ -21,3 +21,10 @@ node_modules/
 *.swp
 
 .some_imp_points(snake_case-ing).txt
+
+.env
+someelse.txt
+.gitignores
+README.md
+/hide
+some_imp_points(snake_case-ing).txt

@@ -74,6 +74,7 @@ const teamsRouter = io => {
     const { title, public, description, uid } = req.body;
     let publicbool = true; //if initially->false
     if (public == 'y') {
+      //lowercase check(covert to string then), str.toLowerCase()
       publicbool = true;
     } else {
       //if initially false then this is not required

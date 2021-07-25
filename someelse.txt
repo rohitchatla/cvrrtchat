@@ -14,9 +14,21 @@
 
 [18-01-21] --> can add private chats/todos/clips/boards/channels/texts/columns/snippets/lists/cards only/mentions/etc in channels/groups/user/boards to particular user in channel/groups/users/boards, etc
 
-[19-01-21] --> can be added/done money transfers(superchat like with (datascience intelligence(ai,ml,dl, etc)/(nlp tagging)/, etc)) and(&), etc
+[19-01-21]; --> can be added/done money transfers(superchat like with (datascience intelligence(ai,ml,dl, etc)/(nlp tagging)/, etc)) and(&), etc
 
 [19-01-21] --> can be added/done (nlp tagging)/(datascience intelligence(ai,ml,dl, etc)/, etc) for urls(sentiment, recommendations, etc) in boards(lists,cards, etc)/chats/messages/, etc(channels,users, etc), live streamming vids chats, etc
+
+[26-01-21(mo,ev),,[*29-01-21(mo,ev) written on(wo)/, etc.-->(26-27-28-29-/-01-/-21)(mo,ev,/, etc)]] --> teams/org structure feature/.like added, blank screen persisted so revisited(main culprit was jwt expirt set to 1d so commented, more on this code commented).[27-01-21] --> pushed on 26-01-21 to live/prod.cvrrtchats: [26-/28-01-21] --> done /tested/and(&) all/, etc.
+
+[[05-02-2021(mo,ev)]-->written this on 05-02-2021 for cvrrtodo's(dndtodo2's)/'s'(misplaced/mistakenly .this--> lines kept in cvrrcroom's/'s' instead of keeping here/or kept validly, etc on [26-/28-01-21, etc.])::"[26-/28-01-21,,[*29-01-21(mo,ev) written on(wo)/, etc.-->26-28-/-01-/-21(mo,ev)]] --> not working/[05/02/2021(mo,ev)--> (mutual's log's/lookedup's-look's-up's,/'s', etc on(-5-02-2021(mo,ev)) these things with cvrrtodo's(dndtodo2's),cvrrtchat's,cvrrcroom's,/,'s' etc's app's(forall))working,/, etc, etc]. need to debug(local/Dev and(&) prod/live), in local prob of unauthorised(unautho)401,404 with build-and(&)-server, client-and(&)-server too also(unauthenticated(unauthe)) done /tested/and all(&)/, etc."]
+
+[28-01-21(mo,ev) written on(wo)/, etc.] --> changed[*/29-01-21(mo) written on(wo)/, etc.-->/RENAMED/renamed] file/folder/, etc name/title/, etc from(prev) "chatapp-mern4-threadedreply-oauth-social-login(fbase)" to "chatapp-mern4-threadedreply-oauth-social-login(fbase)-cvrrtchats"(added "-cvrrtchats" ) on 27/28-01-21(m,e).
+
+[29-01-21(mo,ev) written on(wo)/, etc.] --> changed/renamed from(prev) "chatapp-....." to "chatapp-.....-cvrrtchats"(27-28/01/21(m,e)/probably 28(mo) or 27(ev))(added "-cvrrtchats" ) to "chatapp-.....-cvrrtchats"(27-28/01/21(mo,ev)/probably 28(mo) or 27(ev))(added "-cvrrtchats" ) //half/dotted version
+
+[29-01-21(mo,ev) written on(wo)/, etc.] --> changed/renamed from(prev) "chatapp-mern4-threadedreply-oauth-social-login(fbase)" to "chatapp-mern4-threadedreply-oauth-social-login(fbase)-cvrrtchats"(27-28/01/21(mo,ev)/probably 28(mo) or 27(ev))(added "-cvrrtchats" ) to "chatapp-mern4-threadedreply-oauth-social-login(fbase)-cvrrtchats"(27-28/01/21(mo,ev)/probably 28(mo) or 27(ev))(added "-cvrrtchats" ) //full version
+
+[*29-01-21(mo,ev) written on(wo)/, etc.] --> (mo-morning==8:00-8:30-8:40-8:50-9:00-am,//(approx.),// etc, ev-evening==7:20-10:20-11:00-11:30-12:00pm,//(approx.),// etc, (mo,ev/, etc)or and(&) comb. too.),/ etc
 
 /*.[18-01-21]. ::-->::/-->/>>/#/>/, etc
   legends:: can be add/added/done/*/, etc - feature/future addon's/update, etc.
@@ -29,3 +41,5 @@ all other diff alter. comb. can be added as feature/future addon's/update/ ,etc(
 
 [19-01-21](*) --> all cvrrapps can be integrated together/with this/this can be with others/all comb., etc(and(&) all).
 */
+
+
